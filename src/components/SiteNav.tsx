@@ -45,10 +45,17 @@ export function SiteNav() {
 
           <button
             type="button"
-            onClick={toggle}
+            onClick={(event) => {
+              const bounds = event.currentTarget.getBoundingClientRect();
+              toggle({
+                x: bounds.left + bounds.width / 2,
+                y: bounds.top + bounds.height / 2,
+              });
+            }}
             disabled={isTransitioning}
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             aria-busy={isTransitioning}
+            data-theme-toggle
             className="pixel-step-sm flex h-9 w-9 items-center justify-center bg-muted text-foreground transition-colors hover:text-primary focus-visible:outline-none disabled:cursor-wait disabled:opacity-70"
           >
             {mounted && theme === "dark" ? (

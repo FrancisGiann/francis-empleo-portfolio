@@ -23,8 +23,8 @@ export function Hero() {
       {/* Floating pixel particles behind everything */}
       <PixelParticles />
 
-      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[minmax(0,1fr)_auto]">
-        <div>
+      <div className="hero-grid relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+        <div className="hero-intro min-w-0">
           <p className="hero-in font-pixel text-xs uppercase tracking-[0.25em] text-primary">
             Hello, I'm
           </p>
@@ -49,8 +49,20 @@ export function Hero() {
           >
             {profile.role}
           </p>
+        </div>
+
+        <div className="hero-photo hero-in" style={{ animationDelay: "250ms" }}>
+          <PixelPhoto
+            src={portrait}
+            alt={`Portrait of ${profile.name}, full-stack developer`}
+            width={768}
+            height={960}
+          />
+        </div>
+
+        <div className="hero-details min-w-0">
           <p
-            className="hero-in mt-5 max-w-md leading-relaxed text-muted-foreground"
+            className="hero-in max-w-md leading-relaxed text-muted-foreground"
             style={{ animationDelay: "300ms" }}
           >
             {profile.shortBio}
@@ -66,15 +78,6 @@ export function Hero() {
             </Magnetic>
           </div>
           <RetroModeControl />
-        </div>
-
-        <div className="hero-in justify-self-center" style={{ animationDelay: "250ms" }}>
-          <PixelPhoto
-            src={portrait}
-            alt={`Portrait of ${profile.name}, full-stack developer`}
-            width={768}
-            height={960}
-          />
         </div>
       </div>
     </section>

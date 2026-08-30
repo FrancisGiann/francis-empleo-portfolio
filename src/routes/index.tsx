@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteNav } from "@/components/SiteNav";
 import { Hero } from "@/components/Hero";
 import { AboutSkills } from "@/components/AboutSkills";
-import { SkillsMarquee } from "@/components/SkillsMarquee";
 import { ProjectCarousel } from "@/components/ProjectCarousel";
 import { NowSection } from "@/components/NowSection";
 import { GitHubActivity } from "@/components/GitHubActivity";
@@ -39,7 +38,6 @@ function Index() {
         <Hero />
         <hr className="divider-dotted mx-auto max-w-6xl" />
         <AboutSkills />
-        <SkillsMarquee />
         <ProjectCarousel />
         <hr className="divider-dotted mx-auto max-w-6xl" />
         <NowSection />

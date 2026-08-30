@@ -7,13 +7,16 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { ThemePixelWipe } from "@/components/ThemePixelWipe";
-
 type Theme = "light" | "dark";
+
+export interface ThemeToggleOrigin {
+  x: number;
+  y: number;
+}
 
 interface ThemeContextValue {
   theme: Theme;
-  toggle: () => void;
+  toggle: (origin?: ThemeToggleOrigin) => void;
   mounted: boolean;
   isTransitioning: boolean;
 }
@@ -28,14 +31,8 @@ const ThemeContext = createContext<ThemeContextValue>({
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
-  const [wipePhase, setWipePhase] = useState<"opening" | "closing" | null>(null);
-  const wipePhaseRef = useRef<"opening" | "closing" | null>(null);
-  const timers = useRef<number[]>([]);
-
-  const clearTimers = useCallback(() => {
-    timers.current.forEach((timer) => window.clearTimeout(timer));
-    timers.current = [];
-  }, []);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const transitionLockRef = useRef(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("theme");
@@ -48,46 +45,77 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setTheme(initial);
     document.documentElement.classList.toggle("dark", initial === "dark");
     setMounted(true);
-    return clearTimers;
-  }, [clearTimers]);
+  }, []);
 
-  const toggle = useCallback(() => {
-    if (!mounted || wipePhaseRef.current) return;
+  const toggle = useCallback(
+    (origin?: ThemeToggleOrigin) => {
+      if (!mounted || transitionLockRef.current) return;
 
-    const next: Theme = theme === "dark" ? "light" : "dark";
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const next: Theme = theme === "dark" ? "light" : "dark";
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const nextOrigin: ThemeToggleOrigin = {
+        x:
+          origin && Number.isFinite(origin.x)
+            ? Math.min(Math.max(origin.x, 0), window.innerWidth)
+            : window.innerWidth / 2,
+        y:
+          origin && Number.isFinite(origin.y)
+            ? Math.min(Math.max(origin.y, 0), window.innerHeight)
+            : window.innerHeight / 2,
+      };
 
-    const applyTheme = () => {
-      setTheme(next);
-      localStorage.setItem("theme", next);
-      document.documentElement.classList.toggle("dark", next === "dark");
-    };
+      const applyTheme = () => {
+        setTheme(next);
+        localStorage.setItem("theme", next);
+        document.documentElement.classList.toggle("dark", next === "dark");
+      };
 
-    clearTimers();
-    if (reducedMotion) {
-      applyTheme();
-      return;
-    }
-
-    wipePhaseRef.current = "opening";
-    setWipePhase("opening");
-    timers.current.push(
-      window.setTimeout(() => {
+      if (reducedMotion) {
         applyTheme();
-        wipePhaseRef.current = "closing";
-        setWipePhase("closing");
-      }, 180),
-      window.setTimeout(() => {
-        wipePhaseRef.current = null;
-        setWipePhase(null);
-        timers.current = [];
-      }, 480),
-    );
-  }, [clearTimers, mounted, theme]);
+        return;
+      }
+
+      const startViewTransition = document.startViewTransition;
+      if (typeof startViewTransition !== "function") {
+        applyTheme();
+        return;
+      }
+
+      const radius = Math.hypot(
+        Math.max(nextOrigin.x, window.innerWidth - nextOrigin.x),
+        Math.max(nextOrigin.y, window.innerHeight - nextOrigin.y),
+      );
+      const root = document.documentElement;
+      root.style.setProperty("--theme-origin-x", String(nextOrigin.x) + "px");
+      root.style.setProperty("--theme-origin-y", String(nextOrigin.y) + "px");
+      root.style.setProperty("--theme-ripple-radius", String(Math.max(radius, 1)) + "px");
+
+      transitionLockRef.current = true;
+      setIsTransitioning(true);
+
+      try {
+        const transition = startViewTransition.call(document, applyTheme);
+        transition.finished.then(
+          () => {
+            transitionLockRef.current = false;
+            setIsTransitioning(false);
+          },
+          () => {
+            transitionLockRef.current = false;
+            setIsTransitioning(false);
+          },
+        );
+      } catch {
+        applyTheme();
+        transitionLockRef.current = false;
+        setIsTransitioning(false);
+      }
+    },
+    [mounted, theme],
+  );
 
   return (
-    <ThemeContext.Provider value={{ theme, toggle, mounted, isTransitioning: wipePhase !== null }}>
-      <ThemePixelWipe phase={wipePhase} />
+    <ThemeContext.Provider value={{ theme, toggle, mounted, isTransitioning }}>
       {children}
     </ThemeContext.Provider>
   );

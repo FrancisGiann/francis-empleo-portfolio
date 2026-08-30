@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useRetroMode } from "@/hooks/use-retro-mode";
 
 interface PixelPhotoProps {
   src: string;
@@ -8,24 +9,26 @@ interface PixelPhotoProps {
 }
 
 /**
- * One photo in, pixel-art version generated live: the source image is drawn
- * to a tiny offscreen canvas, then scaled back up with smoothing disabled.
- * The pixelated canvas cross-fades in over the original on hover.
+ * Keeps the source photo as the primary image and offers a lightweight
+ * pixel-art canvas preview on hover or keyboard focus.
  */
 export function PixelPhoto({ src, alt, width, height }: PixelPhotoProps) {
+  const { enabled } = useRetroMode();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    let cancelled = false;
     const img = new Image();
     img.src = src;
     img.onload = () => {
+      if (cancelled) return;
       const W = 340;
       const H = 425; // 4:5 to match the container
-      const PIXEL_W = 34; // ~10% resolution → chunky visible pixels
-      const PIXEL_H = 43;
+      const PIXEL_W = 56; // recognizable face with a clearly pixelated finish
+      const PIXEL_H = 70;
 
       const off = document.createElement("canvas");
       off.width = PIXEL_W;
@@ -56,10 +59,17 @@ export function PixelPhoto({ src, alt, width, height }: PixelPhotoProps) {
       ctx.imageSmoothingEnabled = false;
       ctx.drawImage(off, 0, 0, PIXEL_W, PIXEL_H, 0, 0, W, H);
     };
+    return () => {
+      cancelled = true;
+      img.onload = null;
+    };
   }, [src]);
 
   return (
-    <div className="group pixel-step relative aspect-[4/5] w-[280px] overflow-hidden border border-border bg-card sm:w-[340px]">
+    <div
+      tabIndex={0}
+      className="group pixel-step relative aspect-[4/5] w-full max-w-[340px] overflow-hidden border border-border bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    >
       <img
         src={src}
         alt={alt}
@@ -70,13 +80,21 @@ export function PixelPhoto({ src, alt, width, height }: PixelPhotoProps) {
       <canvas
         ref={canvasRef}
         aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100 motion-reduce:duration-150"
+        className={`pointer-events-none absolute inset-0 h-full w-full [image-rendering:pixelated] transition-opacity duration-300 ease-out motion-reduce:transition-none ${
+          enabled
+            ? "opacity-100"
+            : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+        }`}
       />
       <span
         aria-hidden
-        className="pointer-events-none absolute bottom-2 right-2 font-pixel text-[9px] text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className={`pointer-events-none absolute bottom-2 right-2 font-pixel text-[9px] transition-opacity duration-300 ${
+          enabled
+            ? "opacity-100"
+            : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+        }`}
       >
-        8-BIT MODE
+        8-BIT PREVIEW
       </span>
     </div>
   );

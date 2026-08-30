@@ -5,9 +5,9 @@ A modern, responsive full-stack developer portfolio with a restrained pixel-art 
 ## Features
 
 - Responsive home and projects routes.
-- Light/dark theme with a pixel-curtain transition and persisted preference.
+- Light/dark theme with a pixel-ripple transition and persisted preference.
 - Discoverable 8-bit mode, with the Konami sequence `↑ ↑ ↓ ↓ ← → ← → B A` as a keyboard shortcut.
-- Typewriter hero, generated pixel-photo hover effect, ambient particles, segmented scroll progress, and reveal, magnetic, and marquee interactions.
+- Typewriter hero, pixel-photo hover preview, ambient particles, segmented scroll progress, and reveal and magnetic interactions.
 - Large, accessible project and photo carousels with keyboard controls and descriptive image text.
 - Live GitHub contribution calendar.
 - Reduced-motion and keyboard accessibility support.
