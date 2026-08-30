@@ -5,8 +5,10 @@ import { Magnetic } from "@/components/Magnetic";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
 import { projects } from "@/data/projects";
+import { useRetroMode } from "@/hooks/use-retro-mode";
 
 export function ProjectCarousel() {
+  const { enabled: retro } = useRetroMode();
   const [index, setIndex] = useState(0);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const count = projects.length;
@@ -45,16 +47,25 @@ export function ProjectCarousel() {
       className="mx-auto max-w-6xl px-4 py-16 sm:px-6"
     >
       <Reveal>
-        <p className="font-pixel text-xs uppercase tracking-[0.25em] text-primary">Projects</p>
+        <p
+          className="font-pixel text-xs uppercase tracking-[0.25em] text-primary"
+          aria-label={retro ? "Level 02, select stage" : "Projects"}
+        >
+          <span className="normal-eyebrow">Projects</span>
+          <span className="retro-eyebrow">LEVEL 02 · SELECT STAGE</span>
+        </p>
         <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
           <h2 id="projects-heading" className="text-3xl font-bold tracking-tight">
             Selected work
           </h2>
           <Link
             to="/projects"
+            viewTransition={{ types: ["route"] }}
+            aria-label="View all projects"
             className="nav-link text-sm font-medium text-primary focus-visible:outline-none"
           >
-            View all projects →
+            <span className="normal-cta-label">View all projects →</span>
+            <span className="retro-cta-label">Select stage →</span>
           </Link>
         </div>
       </Reveal>

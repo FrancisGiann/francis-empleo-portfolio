@@ -92,21 +92,25 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
       transitionLockRef.current = true;
       setIsTransitioning(true);
+      root.classList.add("theme-transition");
 
       try {
         const transition = startViewTransition.call(document, applyTheme);
         transition.finished.then(
           () => {
+            root.classList.remove("theme-transition");
             transitionLockRef.current = false;
             setIsTransitioning(false);
           },
           () => {
+            root.classList.remove("theme-transition");
             transitionLockRef.current = false;
             setIsTransitioning(false);
           },
         );
       } catch {
         applyTheme();
+        root.classList.remove("theme-transition");
         transitionLockRef.current = false;
         setIsTransitioning(false);
       }

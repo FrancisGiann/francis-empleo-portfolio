@@ -4,11 +4,14 @@ A modern, responsive full-stack developer portfolio with a restrained pixel-art 
 
 ## Features
 
-- Responsive home and projects routes.
+- Responsive home, projects, and `/projects/:projectId` case-study routes with router-level 404 handling.
 - Light/dark theme with a pixel-ripple transition and persisted preference.
 - Discoverable 8-bit mode, with the Konami sequence `↑ ↑ ↓ ↓ ← → ← → B A` as a keyboard shortcut.
 - Typewriter hero, pixel-photo hover preview, ambient particles, segmented scroll progress, and reveal and magnetic interactions.
-- Large, accessible project and photo carousels with keyboard controls and descriptive image text.
+- Playable project cartridges with engagement-aware screenshot cycling, touch/keyboard controls, and internal case studies.
+- Data-driven case studies with architecture flow, technology decisions, comparisons, timelines, and optional outcome/performance sections.
+- A short first-visit boot status (`FGE_OS v1.0`) that skips on repeat visits and reduced-motion preferences.
+- Retro-only stage labels, skill inventory, player-status footer, and a code-native pixel avatar.
 - Live GitHub contribution calendar.
 - Reduced-motion and keyboard accessibility support.
 - SSR and production output through TanStack Start and Nitro.
@@ -59,7 +62,9 @@ src/
 ├── routes/
 │   ├── __root.tsx    # Root shell and shared providers
 │   ├── index.tsx     # Home route
-│   └── projects.tsx  # Projects route
+│   ├── projects.tsx  # Projects route
+│   └── projects/
+│       └── $projectId.tsx # Dynamic case-study route
 ├── styles.css        # Theme tokens, typography, pixel styling, and motion
 └── server.ts         # TanStack Start server entry
 public/               # Static assets such as the favicon and robots.txt
@@ -67,14 +72,16 @@ public/               # Static assets such as the favicon and robots.txt
 
 ## Customization
 
-- Personal profile, projects, skills, and current items: `src/data/projects.ts`
+- Personal profile, projects, skills, current items, and structured case studies: `src/data/projects.ts`
 - Images: `src/assets/`
 - Color, type, and motion: `src/styles.css`
-- Page metadata: `src/routes/index.tsx`, `src/routes/projects.tsx`, `src/routes/__root.tsx`
+- Page metadata: `src/routes/index.tsx`, `src/routes/projects.tsx`, `src/routes/projects/$projectId.tsx`, `src/routes/__root.tsx`
+
+Each project is customized from one entry in `src/data/projects.ts`. Add verified `external.repo` or `external.demo` values only when those URLs are real; the UI omits those actions when they are absent. The structured case-study fields are intentionally qualitative drafts until the real role, dates, measurements, outcomes, and project links are supplied.
 
 ## Accessibility and performance
 
-The interface supports keyboard controls and visible focus states, uses descriptive image alt text, respects `prefers-reduced-motion`, and lazy-loads project imagery.
+The interface supports keyboard controls and visible focus states, uses descriptive image alt text, respects `prefers-reduced-motion`, pauses carousel timers when not engaged or when the document is hidden, and lazy-loads project imagery. Internal route transitions use native View Transitions when available and fall back to normal router navigation.
 
 ## Production
 
@@ -89,4 +96,4 @@ The build produces a `.output/` artifact, which is ignored by Git.
 
 ## Status
 
-Project content and URLs are still being personalized. Some project entries are placeholders for portfolio content and should not be treated as finished public case studies.
+Project content and URLs are still being personalized. Current project entries and case-study sections are qualitative drafts/placeholders and should not be treated as finished public case studies until the real project details, repository/demo links, role, timeframe, measured performance, and outcomes are added.

@@ -148,6 +148,7 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    overflow-x: hidden;
   }
 }
 
@@ -337,16 +338,16 @@
 
 /* ---- Circular View Transition for theme changes ---- */
 
-::view-transition-group(root),
-::view-transition-image-pair(root) {
+html.theme-transition::view-transition-group(root),
+html.theme-transition::view-transition-image-pair(root) {
   animation: none;
 }
 
-::view-transition-old(root) {
+html.theme-transition::view-transition-old(root) {
   animation: none;
 }
 
-::view-transition-new(root) {
+html.theme-transition::view-transition-new(root) {
   animation: theme-circle-reveal 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -356,6 +357,48 @@
   }
   to {
     clip-path: circle(var(--theme-ripple-radius) at var(--theme-origin-x) var(--theme-origin-y));
+  }
+}
+
+/* ---- Short internal route transition (typed navigation only) ---- */
+
+:root:active-view-transition-type(route)::view-transition-group(root),
+:root:active-view-transition-type(route)::view-transition-image-pair(root) {
+  animation-duration: 340ms;
+}
+
+:root:active-view-transition-type(route)::view-transition-old(root) {
+  animation: route-pixel-old 150ms steps(3, end) both;
+}
+
+:root:active-view-transition-type(route)::view-transition-new(root) {
+  animation: route-pixel-new 340ms steps(4, end) both;
+}
+
+/* Browsers without transition-type support still get the same short dissolve. */
+html:not(.theme-transition)::view-transition-old(root) {
+  animation: route-pixel-old 150ms steps(3, end) both;
+}
+
+html:not(.theme-transition)::view-transition-new(root) {
+  animation: route-pixel-new 340ms steps(4, end) both;
+}
+
+@keyframes route-pixel-old {
+  to {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes route-pixel-new {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
   }
 }
 
@@ -397,6 +440,73 @@
 .project-media-frame {
   position: relative;
   z-index: 1;
+}
+
+.cartridge-frame {
+  position: relative;
+  box-shadow:
+    8px 8px 0 color-mix(in oklab, var(--primary) 18%, var(--card)),
+    0 18px 36px color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+
+.project-detail-media {
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.architecture-flow {
+  display: grid;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+}
+
+.architecture-node {
+  position: relative;
+}
+
+@media (min-width: 48rem) {
+  .architecture-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .architecture-node {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .architecture-node:not(:last-child) {
+    margin-right: 2rem;
+  }
+
+  .architecture-node:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    top: 50%;
+    right: -1.45rem;
+    z-index: 1;
+    color: var(--primary);
+    font-family: var(--font-pixel);
+    font-size: 1rem;
+    line-height: 1;
+    transform: translateY(-50%);
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .architecture-node:not(:last-child)::after {
+    content: "↓";
+    position: absolute;
+    bottom: -1.55rem;
+    left: 50%;
+    color: var(--primary);
+    font-family: var(--font-pixel);
+    font-size: 1rem;
+    line-height: 1;
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes project-card-in {
@@ -463,6 +573,36 @@
 
 /* ---- Konami retro takeover (`.retro` on <html>) ---- */
 
+.retro-eyebrow,
+.retro-cta-label,
+.retro-start-label,
+.retro-inventory,
+.retro-footer {
+  display: none;
+}
+
+html.retro .normal-eyebrow,
+html.retro .normal-cta-label,
+html.retro .normal-start-label,
+html.retro .normal-skills,
+html.retro .normal-footer {
+  display: none;
+}
+
+html.retro .retro-eyebrow,
+html.retro .retro-cta-label,
+html.retro .retro-start-label {
+  display: inline;
+}
+
+html.retro .retro-inventory {
+  display: block;
+}
+
+html.retro .retro-footer {
+  display: flex;
+}
+
 html.retro {
   --primary: oklch(0.7 0.2 150);
   --ring: oklch(0.7 0.2 150);
@@ -491,6 +631,73 @@ html.retro h3 {
   letter-spacing: 0.02em;
 }
 
+/* ---- First-visit boot status ---- */
+
+.boot-sequence {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  background: color-mix(in oklab, var(--background) 86%, transparent);
+  color: var(--foreground);
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  pointer-events: none;
+  text-align: center;
+  text-transform: uppercase;
+  backdrop-filter: blur(3px);
+}
+
+.boot-sequence span {
+  animation: boot-line-in 220ms steps(3, end) both;
+}
+
+.boot-sequence span:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.boot-sequence span:nth-child(3) {
+  animation-delay: 300ms;
+  color: var(--primary);
+}
+
+@keyframes boot-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pixel-avatar {
+  display: grid;
+  grid-template-columns: repeat(5, 4px);
+  grid-auto-rows: 4px;
+  gap: 1px;
+  width: max-content;
+  padding: 4px;
+  border: 1px solid color-mix(in oklab, var(--primary) 60%, var(--border));
+  background: var(--card);
+  image-rendering: pixelated;
+}
+
+.pixel-avatar-cell {
+  width: 4px;
+  height: 4px;
+}
+
+.pixel-avatar-cell.is-on {
+  background: var(--primary);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -507,6 +714,10 @@ html.retro h3 {
   .ambient-glow,
   .theme-icon-in,
   .pixel-cursor {
+    animation: none;
+  }
+
+  .boot-sequence span {
     animation: none;
   }
 
