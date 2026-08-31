@@ -7,6 +7,9 @@ export function MiniGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   
+  // Use refs for input state so React buttons can update them without triggering re-renders
+  const inputRef = useRef({ up: false, down: false });
+  
   useEffect(() => {
     if (!enabled || !isPlaying) return;
     
@@ -16,8 +19,6 @@ export function MiniGame() {
     if (!ctx) return;
     
     let animationFrameId: number;
-    let upPressed = false;
-    let downPressed = false;
     
     const W = canvas.width;
     const H = canvas.height;
@@ -57,29 +58,17 @@ export function MiniGame() {
     };
 
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowUp") { upPressed = true; e.preventDefault(); }
-      else if (e.key === "ArrowDown") { downPressed = true; e.preventDefault(); }
+      if (e.key === "ArrowUp") { inputRef.current.up = true; e.preventDefault(); }
+      else if (e.key === "ArrowDown") { inputRef.current.down = true; e.preventDefault(); }
     };
     
     const onKeyUp = (e: KeyboardEvent) => {
-      if (e.key === "ArrowUp") upPressed = false;
-      else if (e.key === "ArrowDown") downPressed = false;
+      if (e.key === "ArrowUp") inputRef.current.up = false;
+      else if (e.key === "ArrowDown") inputRef.current.down = false;
     };
     
     window.addEventListener("keydown", onKeyDown, { passive: false });
     window.addEventListener("keyup", onKeyUp);
-    
-    const onTouchMove = (e: TouchEvent) => {
-      e.preventDefault(); // prevent scrolling
-      if (gameOver) return;
-      const rect = canvas.getBoundingClientRect();
-      const scaleY = H / rect.height;
-      const touchY = (e.touches[0].clientY - rect.top) * scaleY;
-      p1.y = Math.max(0, Math.min(H - p1.height, touchY - p1.height / 2));
-    };
-    
-    canvas.addEventListener("touchstart", onTouchMove, { passive: false });
-    canvas.addEventListener("touchmove", onTouchMove, { passive: false });
     
     const loop = () => {
       // Clear
@@ -104,9 +93,9 @@ export function MiniGame() {
       ctx.strokeStyle = "#ffffff";
       ctx.stroke();
       
-      // Update p1
-      if (upPressed && p1.y > 0) p1.y -= 5;
-      else if (downPressed && p1.y < H - p1.height) p1.y += 5;
+      // Update p1 using ref state
+      if (inputRef.current.up && p1.y > 0) p1.y -= 5;
+      else if (inputRef.current.down && p1.y < H - p1.height) p1.y += 5;
       
       // Update p2 (simple AI - slowed down so it's easier to beat)
       if (ball.y < p2.y + p2.height / 2 && p2.y > 0) p2.y -= 2.6;
@@ -182,8 +171,6 @@ export function MiniGame() {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
       canvas.removeEventListener("click", onCanvasClick);
-      canvas.removeEventListener("touchstart", onTouchMove);
-      canvas.removeEventListener("touchmove", onTouchMove);
       if (audioCtx) {
         try { audioCtx.close(); } catch(e) {}
       }
@@ -202,14 +189,14 @@ export function MiniGame() {
         {!isPlaying ? (
           <div>
             <p className="mb-6 font-pixel text-sm text-foreground">
-              Use <span className="text-primary">↑ ↓</span> or swipe screen to play.
+              Use <span className="text-primary">↑ ↓</span> or D-Pad to play.
             </p>
             <PixelButton href="#" onClick={(e: any) => { e.preventDefault(); setIsPlaying(true); }}>
               PLAY PONG
             </PixelButton>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-6">
             <div className="pixel-step flex justify-center border-[4px] border-foreground p-1 bg-black overflow-hidden relative mx-auto w-full max-w-[400px]" style={{ height: "250px" }}>
               <canvas
                 ref={canvasRef}
@@ -219,6 +206,31 @@ export function MiniGame() {
                 tabIndex={0}
               />
             </div>
+            
+            {/* Mobile On-Screen D-Pad */}
+            <div className="flex gap-4 sm:hidden">
+              <button
+                type="button"
+                className="pixel-step flex h-14 w-14 items-center justify-center border-4 border-foreground bg-muted text-2xl font-bold active:bg-primary active:text-primary-foreground touch-none select-none"
+                onPointerDown={(e) => { e.preventDefault(); inputRef.current.up = true; }}
+                onPointerUp={(e) => { e.preventDefault(); inputRef.current.up = false; }}
+                onPointerLeave={() => { inputRef.current.up = false; }}
+                onPointerCancel={() => { inputRef.current.up = false; }}
+              >
+                ↑
+              </button>
+              <button
+                type="button"
+                className="pixel-step flex h-14 w-14 items-center justify-center border-4 border-foreground bg-muted text-2xl font-bold active:bg-primary active:text-primary-foreground touch-none select-none"
+                onPointerDown={(e) => { e.preventDefault(); inputRef.current.down = true; }}
+                onPointerUp={(e) => { e.preventDefault(); inputRef.current.down = false; }}
+                onPointerLeave={() => { inputRef.current.down = false; }}
+                onPointerCancel={() => { inputRef.current.down = false; }}
+              >
+                ↓
+              </button>
+            </div>
+
             <PixelButton href="#" onClick={(e: any) => { e.preventDefault(); setIsPlaying(false); }}>
               QUIT GAME
             </PixelButton>
