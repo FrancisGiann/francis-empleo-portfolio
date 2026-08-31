@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface ImageLightboxProps {
@@ -39,13 +40,13 @@ export function ImageLightbox({ images, initialIndex, alt, onClose }: ImageLight
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose, prev, next]);
 
-  return (
+  const content = (
     <div
       role="dialog"
       aria-modal="true"
       aria-label="Image lightbox"
       onClick={onClose}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm transition-opacity duration-200 sm:p-8 ${
+      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm transition-opacity duration-200 sm:p-8 ${
         mounted ? "opacity-100" : "opacity-0"
       }`}
     >
@@ -53,7 +54,7 @@ export function ImageLightbox({ images, initialIndex, alt, onClose }: ImageLight
         type="button"
         onClick={onClose}
         aria-label="Close image viewer"
-        className="pixel-step absolute right-4 top-4 z-50 flex h-11 w-11 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="absolute right-4 top-4 z-[10000] flex h-11 w-11 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <X className="h-6 w-6" aria-hidden />
       </button>
@@ -64,7 +65,7 @@ export function ImageLightbox({ images, initialIndex, alt, onClose }: ImageLight
             type="button"
             onClick={(e) => { e.stopPropagation(); prev(); }}
             aria-label="Previous image"
-            className="absolute left-3 top-1/2 z-50 flex h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:left-6"
+            className="absolute left-3 top-1/2 z-[10000] flex h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:left-6"
           >
             <ChevronLeft className="h-6 w-6" aria-hidden />
           </button>
@@ -72,7 +73,7 @@ export function ImageLightbox({ images, initialIndex, alt, onClose }: ImageLight
             type="button"
             onClick={(e) => { e.stopPropagation(); next(); }}
             aria-label="Next image"
-            className="absolute right-3 top-1/2 z-50 flex h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:right-6"
+            className="absolute right-3 top-1/2 z-[10000] flex h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:right-6"
           >
             <ChevronRight className="h-6 w-6" aria-hidden />
           </button>
@@ -92,7 +93,7 @@ export function ImageLightbox({ images, initialIndex, alt, onClose }: ImageLight
 
       {count > 1 && (
         <div
-          className="absolute bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2"
+          className="absolute bottom-6 left-1/2 z-[10000] flex -translate-x-1/2 items-center gap-2"
           onClick={(e) => e.stopPropagation()}
         >
           <span className="font-pixel text-xs tracking-widest text-white/70">
@@ -102,4 +103,6 @@ export function ImageLightbox({ images, initialIndex, alt, onClose }: ImageLight
       )}
     </div>
   );
+
+  return createPortal(content, document.body);
 }
