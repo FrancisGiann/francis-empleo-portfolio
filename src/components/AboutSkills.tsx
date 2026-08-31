@@ -50,16 +50,16 @@ export function AboutSkills() {
           <p className="font-pixel text-[11px] uppercase tracking-[0.2em] text-primary">
             Inventory // skills equipped
           </p>
-          <ul className="mt-5 grid gap-3 sm:grid-cols-2" role="list">
+          <ul className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3" role="list">
             {skillGroups.flatMap((group) =>
               group.skills.map((skill) => (
                 <li
                   key={skill}
-                  className="flex items-center gap-3 border border-border bg-muted/40 px-3 py-3 text-sm"
+                  className="flex items-center gap-2 border border-border bg-muted/40 px-2.5 py-2 text-xs sm:px-3 sm:py-2.5 sm:text-sm"
                 >
-                  <span className="h-2 w-2 shrink-0 bg-primary" aria-hidden />
-                  <span>{skill}</span>
-                  <span className="ml-auto font-pixel text-[9px] uppercase tracking-widest text-muted-foreground">
+                  <span className="h-1.5 w-1.5 shrink-0 bg-primary sm:h-2 sm:w-2" aria-hidden />
+                  <span className="truncate font-medium">{skill}</span>
+                  <span className="ml-auto hidden font-pixel text-[8px] uppercase tracking-widest text-muted-foreground min-[400px]:inline">
                     {group.label}
                   </span>
                 </li>

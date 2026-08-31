@@ -15,16 +15,6 @@ export function MiniGame() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     
-    let isPaused = false;
-    
-    // Auto-pause if user scrolls away
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0]) {
-        isPaused = !entries[0].isIntersecting;
-      }
-    }, { threshold: 0.1 });
-    observer.observe(canvas);
-    
     let animationFrameId: number;
     let upPressed = false;
     let downPressed = false;
@@ -38,6 +28,34 @@ export function MiniGame() {
     const p2 = { x: W - 18, y: H / 2 - 25, width: 8, height: 50, score: 0 };
     let gameOver = false;
     
+    // Shared single AudioContext instance
+    let audioCtx: AudioContext | null = null;
+
+    const playBeep = (freq: number = 800, type: OscillatorType = "square") => {
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (!audioCtx || audioCtx.state === "suspended") {
+          audioCtx?.resume();
+        }
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = type;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      } catch(e) {}
+    };
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowUp") { upPressed = true; e.preventDefault(); }
       else if (e.key === "ArrowDown") { downPressed = true; e.preventDefault(); }
@@ -63,29 +81,7 @@ export function MiniGame() {
     canvas.addEventListener("touchstart", onTouchMove, { passive: false });
     canvas.addEventListener("touchmove", onTouchMove, { passive: false });
     
-    const playBeep = (freq: number = 800, type: OscillatorType = "square") => {
-      try {
-        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        
-        osc.type = type;
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
-      } catch(e) {}
-    };
-    
     const loop = () => {
-      if (isPaused) {
-        animationFrameId = requestAnimationFrame(loop);
-        return;
-      }
-      
       // Clear
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, W, H);
@@ -182,13 +178,15 @@ export function MiniGame() {
     loop();
     
     return () => {
-      observer.disconnect();
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
       canvas.removeEventListener("click", onCanvasClick);
       canvas.removeEventListener("touchstart", onTouchMove);
       canvas.removeEventListener("touchmove", onTouchMove);
+      if (audioCtx) {
+        try { audioCtx.close(); } catch(e) {}
+      }
     };
   }, [enabled, isPlaying]);
 
