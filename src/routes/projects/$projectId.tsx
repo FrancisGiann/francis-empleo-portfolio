@@ -42,7 +42,7 @@ function ProjectDetailPage() {
   const { project } = Route.useLoaderData();
   const { enabled: retro } = useRetroMode();
   const [photoIndex, setPhotoIndex] = useState(0);
-  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const projectIndex = projects.findIndex((item) => item.id === project.id);
 
   const previous = projects[(projectIndex - 1 + projects.length) % projects.length]!;
@@ -98,7 +98,7 @@ function ProjectDetailPage() {
               <div className="pixel-step cartridge-frame group relative aspect-[8/5] overflow-hidden border border-border bg-card">
                 <button
                   type="button"
-                  onClick={() => setLightboxSrc(project.images[photoIndex] ?? project.images[0])}
+                  onClick={() => setLightboxOpen(true)}
                   aria-label="Expand image"
                   className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center border border-border bg-background/80 text-foreground opacity-90 backdrop-blur-sm transition-all duration-200 hover:bg-primary hover:text-primary-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:opacity-0 md:group-hover:opacity-100"
                 >
@@ -374,11 +374,12 @@ function ProjectDetailPage() {
       </main>
       <SiteFooter />
 
-      {lightboxSrc && (
+      {lightboxOpen && (
         <ImageLightbox
-          src={lightboxSrc}
+          images={project.images}
+          initialIndex={photoIndex}
           alt={project.imageAlt}
-          onClose={() => setLightboxSrc(null)}
+          onClose={() => setLightboxOpen(false)}
         />
       )}
     </div>

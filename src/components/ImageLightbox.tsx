@@ -1,14 +1,20 @@
-import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface ImageLightboxProps {
-  src: string;
+  images: string[];
+  initialIndex: number;
   alt: string;
   onClose: () => void;
 }
 
-export function ImageLightbox({ src, alt, onClose }: ImageLightboxProps) {
+export function ImageLightbox({ images, initialIndex, alt, onClose }: ImageLightboxProps) {
   const [mounted, setMounted] = useState(false);
+  const [index, setIndex] = useState(initialIndex);
+  const count = images.length;
+
+  const prev = useCallback(() => setIndex((i) => (i - 1 + count) % count), [count]);
+  const next = useCallback(() => setIndex((i) => (i + 1) % count), [count]);
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => setMounted(true));
@@ -25,13 +31,13 @@ export function ImageLightbox({ src, alt, onClose }: ImageLightboxProps) {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowLeft") prev();
+      else if (e.key === "ArrowRight") next();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+  }, [onClose, prev, next]);
 
   return (
     <div
@@ -52,16 +58,48 @@ export function ImageLightbox({ src, alt, onClose }: ImageLightboxProps) {
         <X className="h-6 w-6" aria-hidden />
       </button>
 
+      {count > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); prev(); }}
+            aria-label="Previous image"
+            className="absolute left-3 top-1/2 z-50 flex h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:left-6"
+          >
+            <ChevronLeft className="h-6 w-6" aria-hidden />
+          </button>
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); next(); }}
+            aria-label="Next image"
+            className="absolute right-3 top-1/2 z-50 flex h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:right-6"
+          >
+            <ChevronRight className="h-6 w-6" aria-hidden />
+          </button>
+        </>
+      )}
+
       <div
         className="relative flex h-full w-full max-h-[90vh] max-w-[90vw] items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
         <img
-          src={src}
+          src={images[index]}
           alt={alt}
           className="max-h-[90vh] max-w-[90vw] select-none object-contain shadow-2xl"
         />
       </div>
+
+      {count > 1 && (
+        <div
+          className="absolute bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <span className="font-pixel text-xs tracking-widest text-white/70">
+            {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

@@ -17,7 +17,7 @@ export function ProjectCard({ project, reversed = false }: ProjectCardProps) {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [engaged, setEngaged] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(true);
-  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const photoCount = project.images.length;
 
   const goPhoto = (dir: 1 | -1) => {
@@ -92,7 +92,7 @@ export function ProjectCard({ project, reversed = false }: ProjectCardProps) {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                setLightboxSrc(project.images[photoIndex] ?? project.images[0]);
+                setLightboxOpen(true);
               }}
               aria-label="Expand image"
               className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center border border-border bg-background/80 text-foreground opacity-90 backdrop-blur-sm transition-all duration-200 hover:bg-primary hover:text-primary-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:opacity-0 md:group-hover:opacity-100"
@@ -223,11 +223,12 @@ export function ProjectCard({ project, reversed = false }: ProjectCardProps) {
         </div>
       </div>
 
-      {lightboxSrc && (
+      {lightboxOpen && (
         <ImageLightbox
-          src={lightboxSrc}
+          images={project.images}
+          initialIndex={photoIndex}
           alt={project.imageAlt}
-          onClose={() => setLightboxSrc(null)}
+          onClose={() => setLightboxOpen(false)}
         />
       )}
     </article>
