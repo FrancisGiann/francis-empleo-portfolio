@@ -6,10 +6,8 @@ export function MiniGame() {
   const { enabled } = useRetroMode();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  
-  // Use refs for input state so React buttons can update them without triggering re-renders
-  const inputRef = useRef({ up: false, down: false });
-  
+  const inputRef = useRef({ dx: 1, dy: 0 }); // Initial direction: right
+
   useEffect(() => {
     if (!enabled || !isPlaying) return;
     
@@ -19,20 +17,28 @@ export function MiniGame() {
     if (!ctx) return;
     
     let animationFrameId: number;
+    let lastTime = 0;
     
+    const GRID_SIZE = 10;
     const W = canvas.width;
     const H = canvas.height;
+    const COLS = W / GRID_SIZE;
+    const ROWS = H / GRID_SIZE;
     
-    // Game state
-    const ball = { x: W / 2, y: H / 2, size: 8, dx: 4, dy: 4 };
-    const p1 = { x: 10, y: H / 2 - 25, width: 8, height: 50, score: 0 };
-    const p2 = { x: W - 18, y: H / 2 - 25, width: 8, height: 50, score: 0 };
+    let snake = [
+      { x: 10, y: 10 },
+      { x: 9, y: 10 },
+      { x: 8, y: 10 },
+    ];
+    let food = { x: 15, y: 10 };
+    let score = 0;
     let gameOver = false;
+    let currentDir = { dx: 1, dy: 0 };
     
     // Shared single AudioContext instance
     let audioCtx: AudioContext | null = null;
 
-    const playBeep = (freq: number = 800, type: OscillatorType = "square") => {
+    const playBeep = (freq: number = 800, type: OscillatorType = "square", duration: number = 0.05) => {
       try {
         if (!audioCtx) {
           const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
@@ -53,123 +59,129 @@ export function MiniGame() {
         
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
+        osc.stop(audioCtx.currentTime + duration);
       } catch(e) {}
     };
 
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowUp") { inputRef.current.up = true; e.preventDefault(); }
-      else if (e.key === "ArrowDown") { inputRef.current.down = true; e.preventDefault(); }
+    const placeFood = () => {
+      let valid = false;
+      while (!valid) {
+        food.x = Math.floor(Math.random() * COLS);
+        food.y = Math.floor(Math.random() * ROWS);
+        valid = !snake.some(segment => segment.x === food.x && segment.y === food.y);
+      }
     };
     
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.key === "ArrowUp") inputRef.current.up = false;
-      else if (e.key === "ArrowDown") inputRef.current.down = false;
+    const onKeyDown = (e: KeyboardEvent) => {
+      const isUp = e.key === "ArrowUp" || e.key.toLowerCase() === "w";
+      const isDown = e.key === "ArrowDown" || e.key.toLowerCase() === "s";
+      const isLeft = e.key === "ArrowLeft" || e.key.toLowerCase() === "a";
+      const isRight = e.key === "ArrowRight" || e.key.toLowerCase() === "d";
+      
+      if (isUp && currentDir.dy === 0) { inputRef.current = { dx: 0, dy: -1 }; e.preventDefault(); }
+      else if (isDown && currentDir.dy === 0) { inputRef.current = { dx: 0, dy: 1 }; e.preventDefault(); }
+      else if (isLeft && currentDir.dx === 0) { inputRef.current = { dx: -1, dy: 0 }; e.preventDefault(); }
+      else if (isRight && currentDir.dx === 0) { inputRef.current = { dx: 1, dy: 0 }; e.preventDefault(); }
     };
     
     window.addEventListener("keydown", onKeyDown, { passive: false });
-    window.addEventListener("keyup", onKeyUp);
     
-    const loop = () => {
-      // Clear
+    const loop = (timestamp: number) => {
+      animationFrameId = requestAnimationFrame(loop);
+      
+      if (gameOver) {
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "30px 'Silkscreen', monospace";
+        ctx.fillText("GAME OVER", W / 2 - 100, H / 2 - 10);
+        ctx.font = "16px 'Silkscreen', monospace";
+        ctx.fillText(`SCORE: ${score}`, W / 2 - 45, H / 2 + 25);
+        ctx.fillText("Click to restart", W / 2 - 95, H / 2 + 60);
+        return;
+      }
+      
+      // Throttle to ~12 FPS
+      if (timestamp - lastTime < 80) return;
+      lastTime = timestamp;
+      
+      currentDir = { ...inputRef.current };
+      
+      const head = { x: snake[0].x + currentDir.dx, y: snake[0].y + currentDir.dy };
+      
+      // Wall collision
+      if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
+        gameOver = true;
+        playBeep(200, "sawtooth", 0.3);
+        return;
+      }
+      
+      // Self collision
+      if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+        gameOver = true;
+        playBeep(200, "sawtooth", 0.3);
+        return;
+      }
+      
+      snake.unshift(head);
+      
+      // Food collision
+      if (head.x === food.x && head.y === food.y) {
+        score += 10;
+        playBeep(1200, "square", 0.05);
+        placeFood();
+      } else {
+        snake.pop();
+      }
+      
+      // Draw Clear
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, W, H);
       
-      if (gameOver) {
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "30px 'Silkscreen', monospace";
-        const msg = p1.score >= 10 ? "YOU WIN!" : "GAME OVER";
-        ctx.fillText(msg, W / 2 - 80, H / 2);
-        ctx.font = "16px 'Silkscreen', monospace";
-        ctx.fillText("Click screen to restart", W / 2 - 115, H / 2 + 40);
-        return; // Stop animation loop when game over
-      }
+      // Draw Food
+      ctx.fillStyle = "#primary"; // Fallback if css var fails
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--primary").trim() ? `hsl(${getComputedStyle(document.documentElement).getPropertyValue("--primary")})` : "#22c55e";
+      ctx.fillRect(food.x * GRID_SIZE, food.y * GRID_SIZE, GRID_SIZE - 1, GRID_SIZE - 1);
       
-      // Draw center dashed line
-      ctx.setLineDash([10, 10]);
-      ctx.beginPath();
-      ctx.moveTo(W/2, 0);
-      ctx.lineTo(W/2, H);
-      ctx.strokeStyle = "#ffffff";
-      ctx.stroke();
-      
-      // Update p1 using ref state
-      if (inputRef.current.up && p1.y > 0) p1.y -= 5;
-      else if (inputRef.current.down && p1.y < H - p1.height) p1.y += 5;
-      
-      // Update p2 (simple AI - slowed down so it's easier to beat)
-      if (ball.y < p2.y + p2.height / 2 && p2.y > 0) p2.y -= 2.6;
-      else if (ball.y > p2.y + p2.height / 2 && p2.y < H - p2.height) p2.y += 2.6;
-      
-      // Update ball
-      ball.x += ball.dx;
-      ball.y += ball.dy;
-      
-      // Top/Bottom collision
-      if (ball.y <= 0 || ball.y + ball.size >= H) {
-        ball.dy *= -1;
-      }
-      
-      // Paddle collision
-      if (ball.dx < 0 && ball.x <= p1.x + p1.width && ball.y + ball.size >= p1.y && ball.y <= p1.y + p1.height) {
-        ball.dx *= -1;
-        playBeep();
-      } else if (ball.dx > 0 && ball.x + ball.size >= p2.x && ball.y + ball.size >= p2.y && ball.y <= p2.y + p2.height) {
-        ball.dx *= -1;
-        playBeep();
-      }
-      
-      // Score
-      if (ball.x < 0) {
-        p2.score++;
-        ball.x = W / 2; ball.y = H / 2; ball.dx = 4;
-        playBeep(300, "sawtooth");
-      } else if (ball.x > W) {
-        p1.score++;
-        ball.x = W / 2; ball.y = H / 2; ball.dx = -4;
-        playBeep(1200, "square");
-      }
-      
-      // Win condition
-      if (p1.score >= 10 || p2.score >= 10) {
-        gameOver = true;
-      }
-      
-      // Draw everything
+      // Draw Snake
       ctx.fillStyle = "#ffffff";
-      ctx.fillRect(p1.x, p1.y, p1.width, p1.height);
-      ctx.fillRect(p2.x, p2.y, p2.width, p2.height);
-      ctx.fillRect(ball.x, ball.y, ball.size, ball.size);
+      snake.forEach((segment, i) => {
+        if (i === 0) {
+          ctx.fillStyle = "#dddddd"; // Head slightly darker
+        } else {
+          ctx.fillStyle = "#ffffff";
+        }
+        ctx.fillRect(segment.x * GRID_SIZE, segment.y * GRID_SIZE, GRID_SIZE - 1, GRID_SIZE - 1);
+      });
       
-      ctx.font = "30px 'Silkscreen', monospace";
-      ctx.fillText(p1.score.toString(), W / 2 - 50, 40);
-      ctx.fillText(p2.score.toString(), W / 2 + 30, 40);
-      
-      animationFrameId = requestAnimationFrame(loop);
+      // Draw Score
+      ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+      ctx.font = "12px 'Silkscreen', monospace";
+      ctx.fillText(`SCORE: ${score}`, 10, 20);
     };
     
     const onCanvasClick = () => {
       if (gameOver) {
         gameOver = false;
-        p1.score = 0;
-        p2.score = 0;
-        ball.x = W / 2;
-        ball.y = H / 2;
-        ball.dx = 4;
-        ball.dy = 4;
-        cancelAnimationFrame(animationFrameId);
-        loop();
+        snake = [
+          { x: 10, y: 10 },
+          { x: 9, y: 10 },
+          { x: 8, y: 10 },
+        ];
+        currentDir = { dx: 1, dy: 0 };
+        inputRef.current = { dx: 1, dy: 0 };
+        score = 0;
+        placeFood();
       }
     };
     
     canvas.addEventListener("click", onCanvasClick);
     
-    loop();
+    animationFrameId = requestAnimationFrame(loop);
     
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("keyup", onKeyUp);
       canvas.removeEventListener("click", onCanvasClick);
       if (audioCtx) {
         try { audioCtx.close(); } catch(e) {}
@@ -178,6 +190,16 @@ export function MiniGame() {
   }, [enabled, isPlaying]);
 
   if (!enabled) return null;
+
+  const handleDir = (dx: number, dy: number) => {
+    // Prevent 180-degree self-turns
+    const isHorizontal = dx !== 0;
+    if (isHorizontal && inputRef.current.dx === 0) {
+      inputRef.current = { dx, dy };
+    } else if (!isHorizontal && inputRef.current.dy === 0) {
+      inputRef.current = { dx, dy };
+    }
+  };
 
   return (
     <div className="retro-inventory mt-12 mb-8">
@@ -188,11 +210,12 @@ export function MiniGame() {
         
         {!isPlaying ? (
           <div>
-            <p className="mb-6 font-pixel text-sm text-foreground">
-              Use <span className="text-primary">↑ ↓</span> or D-Pad to play.
+            <p className="mb-6 font-pixel text-sm text-foreground leading-relaxed">
+              Play <span className="text-primary">SNAKE</span> to pass the time.<br />
+              Use <span className="text-primary">W A S D</span>, arrow keys, or the D-Pad.
             </p>
             <PixelButton href="#" onClick={(e: any) => { e.preventDefault(); setIsPlaying(true); }}>
-              PLAY PONG
+              START GAME
             </PixelButton>
           </div>
         ) : (
@@ -207,28 +230,43 @@ export function MiniGame() {
               />
             </div>
             
-            {/* Mobile On-Screen D-Pad */}
-            <div className="flex gap-4 sm:hidden">
+            {/* Mobile On-Screen D-Pad (Cross shape) */}
+            <div className="grid grid-cols-3 grid-rows-3 gap-2 sm:hidden mx-auto w-fit">
+              <div />
               <button
                 type="button"
                 className="pixel-step flex h-14 w-14 items-center justify-center border-4 border-foreground bg-muted text-2xl font-bold active:bg-primary active:text-primary-foreground touch-none select-none"
-                onPointerDown={(e) => { e.preventDefault(); inputRef.current.up = true; }}
-                onPointerUp={(e) => { e.preventDefault(); inputRef.current.up = false; }}
-                onPointerLeave={() => { inputRef.current.up = false; }}
-                onPointerCancel={() => { inputRef.current.up = false; }}
+                onPointerDown={(e) => { e.preventDefault(); handleDir(0, -1); }}
               >
                 ↑
               </button>
+              <div />
+              
               <button
                 type="button"
                 className="pixel-step flex h-14 w-14 items-center justify-center border-4 border-foreground bg-muted text-2xl font-bold active:bg-primary active:text-primary-foreground touch-none select-none"
-                onPointerDown={(e) => { e.preventDefault(); inputRef.current.down = true; }}
-                onPointerUp={(e) => { e.preventDefault(); inputRef.current.down = false; }}
-                onPointerLeave={() => { inputRef.current.down = false; }}
-                onPointerCancel={() => { inputRef.current.down = false; }}
+                onPointerDown={(e) => { e.preventDefault(); handleDir(-1, 0); }}
+              >
+                ←
+              </button>
+              <div className="h-14 w-14" /> {/* center empty */}
+              <button
+                type="button"
+                className="pixel-step flex h-14 w-14 items-center justify-center border-4 border-foreground bg-muted text-2xl font-bold active:bg-primary active:text-primary-foreground touch-none select-none"
+                onPointerDown={(e) => { e.preventDefault(); handleDir(1, 0); }}
+              >
+                →
+              </button>
+              
+              <div />
+              <button
+                type="button"
+                className="pixel-step flex h-14 w-14 items-center justify-center border-4 border-foreground bg-muted text-2xl font-bold active:bg-primary active:text-primary-foreground touch-none select-none"
+                onPointerDown={(e) => { e.preventDefault(); handleDir(0, 1); }}
               >
                 ↓
               </button>
+              <div />
             </div>
 
             <PixelButton href="#" onClick={(e: any) => { e.preventDefault(); setIsPlaying(false); }}>
