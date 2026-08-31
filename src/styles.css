@@ -719,8 +719,7 @@ html.retro li,
 html.retro h1, 
 html.retro h2, 
 html.retro h3,
-html.retro a,
-html.retro span {
+html.retro a {
   animation: rpg-reveal 1.2s steps(30, end) forwards;
 }
 
