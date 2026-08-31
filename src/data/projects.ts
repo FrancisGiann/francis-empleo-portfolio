@@ -66,7 +66,7 @@ export const projects: Project[] = [
   {
   id: "sevilla360",
   title: "Sevilla360",
-  description: "A web-based booking and virtual showroom platform for M.I. Sevilla Resort that combines an interactive 360-degree tour with reservation features.",
+  description: "A booking and virtual showroom site for M.I. Sevilla Resort. Guests can explore the place through a 360-degree tour and book rooms right from the same page.",
   tech: ["PHP", "MySQL", "JavaScript", "Panolens.js", "Node.js", "Redis"],
   status: "wip",
   images: [sevillaImg, sevillaImg2, sevillaImg3, sevillaImg4, sevillaImg5, sevillaImg6],
@@ -129,7 +129,7 @@ export const projects: Project[] = [
   {
   id: "general-luna-game",
   title: "General Luna Game",
-  description: "A Java-based 2D fighting game featuring a main menu, character selection, boss battles, and real-time action mechanics.",
+  description: "A 2D fighting game built in Java with a main menu, character select, boss fights, and real-time combat. Made as a final class project.",
   tech: ["Java", "JavaFX", "Object-Oriented Programming (OOP)", "Git"],
   status: "live",
   images: [GeneralLunaImg, GeneralLunaImg2, GeneralLunaImg3, GeneralLunaImg4],
@@ -185,7 +185,7 @@ export const projects: Project[] = [
   {
   id: "flow-typing-workspace",
   title: "Flow — Quiet Precision Typing",
-  description: "A distraction-free typing practice workspace featuring ghost pacing, local-first offline support, and targeted AI-generated drills.",
+  description: "A clean typing app built for focused practice. Features ghost pacing, works offline, and uses AI to generate custom drills based on your weak points.",
   tech: [
     "React",
     "JavaScript",
@@ -267,7 +267,7 @@ export const projects: Project[] = [
   {
   id: "kapeez-cafe-pos",
   title: "Kapeez",
-  description: "A modern, offline-first Point of Sale (POS) application built for cafes, featuring dynamic modifier engines, smart inventory mapping, and role-based shift management.",
+  description: "An offline-first Point of Sale (POS) app for cafes. Handles drink modifiers, auto-decrements inventory ingredients, and manages shift reports without needing a backend or internet connection.",
   tech: [
     "React 19",
     "TypeScript",
@@ -359,9 +359,9 @@ export const profile = {
   name: "Francis Giann Empleo",
   role: "Full-Stack Developer",
   shortBio:
-    "I build web applications end to end — from database schema to polished UI. I care about clean architecture, fast load times, and interfaces that feel effortless to use.",
+    "I like building things for the web — everything from the database all the way up to the pixels on screen. I'm big on writing clean code, keeping things fast, and making sure the UI just works.",
   longBio:
-    "I'm an IT graduate who enjoys owning features across the whole stack — designing the data model, wiring up the API, and sweating the last 10% of the UI. I like problems where performance, reliability, and user experience all pull on each other. Right now I'm deepening my TypeScript and cloud skills, and exploring 3D and interactive experiences on the web.",
+    "I'm an IT graduate who genuinely likes working across the full stack. I'll design the database, set up the API, then spend way too long tweaking the UI until it feels right. I'm drawn to the kind of work where you have to balance speed, reliability, and how things look and feel. Currently getting deeper into TypeScript, cloud stuff on AWS, and playing around with 3D on the web.",
   email: "francisgiann25@gmail.com",
   github: "https://github.com/FrancisGiann",
   githubUsername: "FrancisGiann",
@@ -377,14 +377,14 @@ export const skillGroups: { label: string; skills: string[] }[] = [
 export const nowItems: { label: string; text: string }[] = [
   {
     label: "Learning",
-    text: "Three.js and WebGL shaders — pushing beyond flat UIs into interactive 3D on the web.",
+    text: "Getting into Three.js and WebGL shaders — trying to move past flat UIs and build some actual 3D stuff on the web.",
   },
   {
     label: "Building",
-    text: "This portfolio, plus HabitGrid — an offline-first habit tracker with a streak grid.",
+    text: "This portfolio you're looking at, and HabitGrid — an offline-first habit tracker with a streak grid.",
   },
   {
     label: "Exploring",
-    text: "Cloud architecture on AWS and how to design APIs that stay fast under real load.",
+    text: "Cloud architecture on AWS and figuring out how to build APIs that don't fall over under real traffic.",
   },
 ];
