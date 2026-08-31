@@ -81,8 +81,10 @@ export function MiniGame() {
     };
     
     const loop = () => {
-      animationFrameId = requestAnimationFrame(loop);
-      if (isPaused) return;
+      if (isPaused) {
+        animationFrameId = requestAnimationFrame(loop);
+        return;
+      }
       
       // Clear
       ctx.fillStyle = "#000000";
@@ -95,7 +97,7 @@ export function MiniGame() {
         ctx.fillText(msg, W / 2 - 80, H / 2);
         ctx.font = "16px 'Silkscreen', monospace";
         ctx.fillText("Click screen to restart", W / 2 - 115, H / 2 + 40);
-        return; // stop loop
+        return; // Stop animation loop when game over
       }
       
       // Draw center dashed line
@@ -158,6 +160,7 @@ export function MiniGame() {
       ctx.fillText(p1.score.toString(), W / 2 - 50, 40);
       ctx.fillText(p2.score.toString(), W / 2 + 30, 40);
       
+      animationFrameId = requestAnimationFrame(loop);
     };
     
     const onCanvasClick = () => {
@@ -169,6 +172,7 @@ export function MiniGame() {
         ball.y = H / 2;
         ball.dx = 4;
         ball.dy = 4;
+        cancelAnimationFrame(animationFrameId);
         loop();
       }
     };
