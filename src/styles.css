@@ -702,9 +702,9 @@ html.retro::after {
 }
 
 @keyframes flicker {
-  0% { opacity: 0.95; }
-  50% { opacity: 0.88; }
-  100% { opacity: 0.95; }
+  0% { opacity: 0.97; }
+  50% { opacity: 0.94; }
+  100% { opacity: 0.97; }
 }
 
 /* RPG Dialogue Text Reveal */
