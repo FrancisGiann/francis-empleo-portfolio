@@ -332,7 +332,7 @@ function ProjectDetailPage() {
         </article>
 
         <nav className="mt-20 border-t border-border pt-6" aria-label="Project navigation">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:items-center sm:gap-4">
+          <div className="grid grid-cols-2 gap-y-8 sm:grid-cols-3 sm:items-center sm:gap-4">
             <Link
               to="/projects/$projectId"
               params={{ projectId: previous.id }}
@@ -351,7 +351,7 @@ function ProjectDetailPage() {
             <Link
               to="/projects"
               viewTransition={{ types: ["route"] }}
-              className="order-3 mt-2 justify-self-center text-center font-pixel text-[10px] uppercase tracking-widest text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:order-2 sm:mt-0"
+              className="col-span-2 order-3 justify-self-center text-center font-pixel text-[10px] uppercase tracking-widest text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:col-span-1 sm:order-2"
             >
               <span className="normal-cta-label">All projects</span>
               <span className="retro-cta-label">Stage select</span>
