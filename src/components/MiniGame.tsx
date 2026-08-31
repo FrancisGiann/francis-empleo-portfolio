@@ -210,7 +210,7 @@ export function MiniGame() {
           </div>
         ) : (
           <div className="flex flex-col items-center gap-4">
-            <div className="flex justify-center border-[4px] border-foreground p-1 bg-black overflow-hidden relative mx-auto w-full max-w-[400px]" style={{ height: "250px" }}>
+            <div className="pixel-step flex justify-center border-[4px] border-foreground p-1 bg-black overflow-hidden relative mx-auto w-full max-w-[400px]" style={{ height: "250px" }}>
               <canvas
                 ref={canvasRef}
                 width={400}
