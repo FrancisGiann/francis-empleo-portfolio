@@ -146,37 +146,34 @@ export function ProjectCard({ project, reversed = false }: ProjectCardProps) {
                 >
                   <ChevronRight className="h-5 w-5" aria-hidden />
                 </button>
+                <div
+                  className="absolute bottom-1.5 right-2 z-10 flex gap-1"
+                  role="group"
+                  aria-label="Choose project screenshot"
+                >
+                  {project.images.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setPhotoIndex(i)}
+                      aria-label={`Screenshot ${i + 1} of ${photoCount}`}
+                      aria-pressed={i === photoIndex}
+                      className="photo-dot flex h-7 w-7 items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <span
+                        aria-hidden
+                        className={`h-2 w-2 transition-colors duration-200 motion-reduce:transition-none ${
+                          i === photoIndex
+                            ? "bg-primary"
+                            : "bg-white/50 hover:bg-white/80"
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
               </>
             )}
           </div>
-
-          {photoCount > 1 && (
-            <div
-              className="flex justify-center gap-1 mt-2"
-              role="group"
-              aria-label="Choose project screenshot"
-            >
-              {project.images.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setPhotoIndex(i)}
-                  aria-label={`Screenshot ${i + 1} of ${photoCount}`}
-                  aria-pressed={i === photoIndex}
-                  className="photo-dot flex h-9 w-9 items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                >
-                  <span
-                    aria-hidden
-                    className={`h-2.5 w-2.5 transition-colors duration-200 motion-reduce:transition-none ${
-                      i === photoIndex
-                        ? "bg-primary"
-                        : "bg-muted-foreground/30 hover:bg-foreground/50"
-                    }`}
-                  />
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
