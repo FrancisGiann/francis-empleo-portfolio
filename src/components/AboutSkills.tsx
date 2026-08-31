@@ -2,6 +2,7 @@ import { Reveal } from "@/components/Reveal";
 import { TechTag } from "@/components/TechTag";
 import { profile, skillGroups } from "@/data/projects";
 import { useRetroMode } from "@/hooks/use-retro-mode";
+import { MiniGame } from "@/components/MiniGame";
 
 export function AboutSkills() {
   const { enabled: retro } = useRetroMode();
@@ -67,6 +68,8 @@ export function AboutSkills() {
           </ul>
         </div>
       </Reveal>
+      
+      <MiniGame />
     </section>
   );
 }

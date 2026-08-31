@@ -6,6 +6,7 @@ import { RetroModeControl } from "@/components/RetroModeControl";
 import { useTypewriter } from "@/hooks/use-typewriter";
 import { profile } from "@/data/projects";
 import portrait from "@/assets/portrait.jpg";
+import pixelPortrait from "@/assets/pixel-portrait.jpg";
 
 export function Hero() {
   const { display, done } = useTypewriter(profile.name);
@@ -54,6 +55,7 @@ export function Hero() {
         <div className="hero-photo hero-in" style={{ animationDelay: "250ms" }}>
           <PixelPhoto
             src={portrait}
+            pixelSrc={pixelPortrait}
             alt={`Portrait of ${profile.name}, full-stack developer`}
             width={768}
             height={960}

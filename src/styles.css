@@ -150,6 +150,39 @@
     font-family: var(--font-sans);
     overflow-x: hidden;
   }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+    border-left: 1px solid var(--border);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border: 3px solid var(--background);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in oklab, var(--primary) 80%, black);
+  }
+
+  /* Retro Mode Scrollbar Override */
+  html.retro ::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+  }
+  html.retro ::-webkit-scrollbar-track {
+    background: var(--background);
+    border-left: 4px solid var(--foreground);
+  }
+  html.retro ::-webkit-scrollbar-thumb {
+    background-color: var(--foreground);
+    border: 4px solid var(--background);
+    border-radius: 0;
+  }
 }
 
 /* ---- Pixel-stepped corners: the site's one recurring geometric motif ---- */
@@ -606,6 +639,9 @@ html.retro .retro-footer {
 html.retro {
   --primary: oklch(0.7 0.2 150);
   --ring: oklch(0.7 0.2 150);
+  
+  /* Retro Pixel Cursor (Black with white border) */
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ffffff" d="M0,0v18h6v-6h6v6h6v-6h-6v-6h6V0H0z"/><path fill="%23000000" d="M2,2v14h4v-4h4v4h4v-4h-4v-4h4V2H2z"/></svg>'), auto !important;
 }
 
 html.dark.retro {
@@ -613,22 +649,100 @@ html.dark.retro {
   --ring: oklch(0.8 0.22 145);
 }
 
+html.retro a, html.retro button, html.retro [role="button"] {
+  /* Retro Pointer Cursor (Black with white border) */
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ffffff" d="M8 0h8v4h-8zM4 4h8v4h-8zM12 4h8v4h-8zM0 8h8v8h-8zM16 8h8v8h-8zM4 16h16v4h-16z"/><path fill="%23000000" d="M10 2h4v4h-4zM6 6h4v4h-4zM14 6h4v4h-4zM2 10h4v8h-4zM18 10h4v8h-4zM6 18h12v4h-12z"/></svg>'), pointer !important;
+}
+
 html.retro body {
-  background-image:
-    linear-gradient(color-mix(in oklab, var(--foreground) 6%, transparent) 1px, transparent 1px),
-    linear-gradient(
-      90deg,
-      color-mix(in oklab, var(--foreground) 6%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 24px 24px;
+  background-color: var(--background);
+  background-image: 
+    radial-gradient(2px 2px at 40px 60px, color-mix(in oklab, var(--primary) 40%, transparent) 100%, transparent),
+    radial-gradient(2px 2px at 120px 30px, color-mix(in oklab, var(--primary) 30%, transparent) 100%, transparent),
+    radial-gradient(3px 3px at 180px 140px, color-mix(in oklab, var(--primary) 50%, transparent) 100%, transparent),
+    radial-gradient(2px 2px at 20px 180px, color-mix(in oklab, var(--primary) 20%, transparent) 100%, transparent);
+  background-size: 200px 200px;
+  animation: retro-stars-scroll 60s linear infinite;
+}
+
+@keyframes retro-stars-scroll {
+  from { background-position: 0 0, 0 0, 0 0, 0 0; }
+  to { background-position: 400px 400px, -400px -400px, 400px -400px, -400px 400px; }
+}
+
+/* CRT Overlay Effect */
+html.retro::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: 
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 4px, 6px 100%;
+  z-index: 9999;
+  pointer-events: none;
+  animation: flicker 0.15s infinite;
+  box-shadow: inset 0 0 80px rgba(0,0,0,0.25);
+}
+
+@keyframes flicker {
+  0% { opacity: 0.95; }
+  50% { opacity: 0.88; }
+  100% { opacity: 0.95; }
+}
+
+/* RPG Dialogue Text Reveal */
+@keyframes rpg-reveal {
+  0% { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); opacity: 0; }
+  1% { opacity: 1; }
+  100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); opacity: 1; }
+}
+
+html.retro p, 
+html.retro li, 
+html.retro h1, 
+html.retro h2, 
+html.retro h3,
+html.retro a,
+html.retro span {
+  animation: rpg-reveal 1.2s steps(30, end) forwards;
+}
+
+/* Text Chromatic Aberration (RGB Split) */
+html.retro p, html.retro span, html.retro a, html.retro li {
+  text-shadow: 1px 0 0 rgba(255,0,0,0.6), -1px 0 0 rgba(0,255,255,0.6) !important;
+}
+
+/* Chunky 8-bit UI Borders */
+html.retro .pixel-step,
+html.retro .pixel-step-sm,
+html.retro button,
+html.retro [role="dialog"],
+html.retro .project-card,
+html.retro .bg-card,
+html.retro img,
+html.retro canvas {
+  border: 4px solid var(--foreground) !important;
+  box-shadow: 6px 6px 0px var(--foreground) !important;
+  clip-path: none !important;
+  border-radius: 0 !important;
+}
+
+html.retro .project-media::before, 
+html.retro .project-media::after {
+  display: none !important;
 }
 
 html.retro h1,
 html.retro h2,
 html.retro h3 {
   font-family: var(--font-pixel);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
+  text-shadow: 3px 0 0 red, -3px 0 0 cyan !important;
 }
 
 /* ---- First-visit boot status ---- */
@@ -753,3 +867,8 @@ html.retro h3 {
     transform: none;
   }
 }
+
+/* ---- Normal Mode Polishes ---- */
+
+
+

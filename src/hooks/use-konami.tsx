@@ -17,6 +17,50 @@ const SEQUENCE = [
 
 const STORAGE_KEY = "konami-retro";
 
+function playRetroSound(enable: boolean) {
+  try {
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    osc.type = 'square';
+    
+    const now = ctx.currentTime;
+    
+    if (enable) {
+      // Power up arpeggio
+      osc.frequency.setValueAtTime(440, now); // A4
+      osc.frequency.setValueAtTime(554.37, now + 0.1); // C#5
+      osc.frequency.setValueAtTime(659.25, now + 0.2); // E5
+      osc.frequency.setValueAtTime(880, now + 0.3); // A5
+      
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.1, now + 0.05);
+      gain.gain.setValueAtTime(0.1, now + 0.3);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+      
+      osc.start(now);
+      osc.stop(now + 0.6);
+    } else {
+      // Power down pitch drop
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(55, now + 0.4);
+      
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      
+      osc.start(now);
+      osc.stop(now + 0.4);
+    }
+  } catch (e) {
+    console.error('Audio playback failed', e);
+  }
+}
+
 function announceRetroMode(enabled: boolean, source: RetroToggleSource) {
   const keyboard = source === "keyboard";
   toast(
@@ -50,6 +94,7 @@ export function RetroModeProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
     document.documentElement.classList.toggle("retro", next);
     announceRetroMode(next, source);
+    playRetroSound(next);
   }, []);
 
   useEffect(() => {

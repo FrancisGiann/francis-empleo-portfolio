@@ -6,17 +6,19 @@ interface PixelPhotoProps {
   alt: string;
   width: number;
   height: number;
+  pixelSrc?: string;
 }
 
 /**
  * Keeps the source photo as the primary image and offers a lightweight
- * pixel-art canvas preview on hover or keyboard focus.
+ * pixel-art canvas preview on hover or keyboard focus, OR a custom pixel art image.
  */
-export function PixelPhoto({ src, alt, width, height }: PixelPhotoProps) {
+export function PixelPhoto({ src, alt, width, height, pixelSrc }: PixelPhotoProps) {
   const { enabled } = useRetroMode();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    if (pixelSrc) return; // Skip canvas generation if we have a custom pixel source
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -63,7 +65,7 @@ export function PixelPhoto({ src, alt, width, height }: PixelPhotoProps) {
       cancelled = true;
       img.onload = null;
     };
-  }, [src]);
+  }, [src, pixelSrc]);
 
   return (
     <div
@@ -77,15 +79,29 @@ export function PixelPhoto({ src, alt, width, height }: PixelPhotoProps) {
         height={height}
         className="absolute inset-0 h-full w-full object-cover"
       />
-      <canvas
-        ref={canvasRef}
-        aria-hidden
-        className={`pointer-events-none absolute inset-0 h-full w-full [image-rendering:pixelated] transition-opacity duration-300 ease-out motion-reduce:transition-none ${
-          enabled
-            ? "opacity-100"
-            : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
-        }`}
-      />
+      
+      {pixelSrc ? (
+        <img
+          src={pixelSrc}
+          alt={`Pixel art version of ${alt}`}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ease-out motion-reduce:transition-none ${
+            enabled
+              ? "opacity-100"
+              : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+          }`}
+        />
+      ) : (
+        <canvas
+          ref={canvasRef}
+          aria-hidden
+          className={`pointer-events-none absolute inset-0 h-full w-full [image-rendering:pixelated] transition-opacity duration-300 ease-out motion-reduce:transition-none ${
+            enabled
+              ? "opacity-100"
+              : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+          }`}
+        />
+      )}
+      
       <span
         aria-hidden
         className={`pointer-events-none absolute bottom-2 right-2 font-pixel text-[9px] transition-opacity duration-300 ${

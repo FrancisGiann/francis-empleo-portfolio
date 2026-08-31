@@ -23,7 +23,7 @@ export function RetroModeControl() {
         </span>
       </button>
       <p
-        className="hidden max-w-md font-pixel text-[9px] uppercase tracking-[0.12em] text-muted-foreground md:block"
+        className="hidden max-w-lg font-pixel text-[11px] uppercase tracking-[0.12em] text-foreground/80 md:block"
         aria-live="polite"
       >
         {enabled ? (
@@ -31,7 +31,9 @@ export function RetroModeControl() {
             8-BIT MODE ACTIVE <span className="text-primary">·</span> REPEAT SEQUENCE TO EXIT
           </>
         ) : (
-          <>TIP: PRESS {KONAMI_LABEL} TO UNLOCK 8-BIT MODE</>
+          <>
+            TIP: PRESS <span className="font-sans font-bold text-primary text-[14px] tracking-widest">{KONAMI_LABEL}</span> TO UNLOCK 8-BIT MODE
+          </>
         )}
       </p>
       <p className="mt-2 text-xs text-muted-foreground md:hidden">

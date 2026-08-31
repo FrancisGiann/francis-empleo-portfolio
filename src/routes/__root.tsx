@@ -8,11 +8,12 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 
 import appCss from "../styles.css?url";
 import { ThemeProvider, useTheme } from "../hooks/use-theme";
 import { RetroModeProvider } from "../hooks/use-konami";
+import { useRetroMode } from "../hooks/use-retro-mode";
 import { ScrollProgress } from "../components/ScrollProgress";
 
 const BOOT_VERSION = "fge-boot-v1";
@@ -101,7 +102,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -150,6 +152,26 @@ function RootComponent() {
 
 function KonamiWatcher() {
   const { theme } = useTheme();
+  const { enabled } = useRetroMode();
+
+  useEffect(() => {
+    // Check if retro mode was ever discovered this session or previously
+    const hasDiscovered = localStorage.getItem("konami-retro") === "1";
+    
+    if (!enabled && !hasDiscovered) {
+      const timer = setTimeout(() => {
+        toast("SYSTEM MESSAGE", {
+          description: "Hint: Try typing ↑ ↑ ↓ ↓ ← → ← → B A",
+          className: "font-pixel",
+          duration: 8000,
+        });
+      }, 15000); // Trigger after 15 seconds of viewing the site
+      
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [enabled]);
+
   return <Toaster theme={theme} position="bottom-right" />;
 }
 
