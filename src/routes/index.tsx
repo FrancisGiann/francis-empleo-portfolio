@@ -12,17 +12,17 @@ import { profile } from "@/data/projects";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: `${profile.name} — Full-Stack Developer` },
+      { title: "Francis Giann Empleo | Web Developer Portfolio" },
       {
         name: "description",
         content:
-          "Portfolio of Francis Giann Empleo, a full-stack developer building fast, reliable web applications with React, TypeScript, and Node.js.",
+          "Welcome to the web developer portfolio of Francis Giann (Francis Empleo). View my latest full-stack projects, skills, and interactive experiences.",
       },
-      { property: "og:title", content: `${profile.name} — Full-Stack Developer` },
+      { property: "og:title", content: "Francis Giann Empleo | Web Developer Portfolio" },
       {
         property: "og:description",
         content:
-          "Portfolio of Francis Giann Empleo, a full-stack developer building fast, reliable web applications with React, TypeScript, and Node.js.",
+          "Welcome to the web developer portfolio of Francis Giann (Francis Empleo). View my latest full-stack projects, skills, and interactive experiences.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

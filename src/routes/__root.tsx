@@ -81,18 +81,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Francis Giann Empleo — Full-Stack Developer" },
+      { title: "Francis Giann Empleo — Web Developer Portfolio" },
       {
         name: "description",
         content:
-          "Portfolio of Francis Giann Empleo, a full-stack developer building fast, reliable web applications.",
+          "The official portfolio of Francis Giann Empleo. I am a full-stack web developer specializing in React, TypeScript, and Node.js. Welcome to my web developer portfolio.",
+      },
+      {
+        name: "keywords",
+        content:
+          "Francis Giann, Francis Empleo, Francis Giann Empleo, Francis Giann portfolio, Francis Giann Empleo portfolio, Francis portfolio, Web Developer, Full-Stack Developer, React Developer, Philippines",
       },
       { name: "author", content: "Francis Giann Empleo" },
-      { property: "og:title", content: "Francis Giann Empleo — Full-Stack Developer" },
+      { property: "og:title", content: "Francis Giann Empleo — Web Developer Portfolio" },
       {
         property: "og:description",
         content:
-          "Portfolio of Francis Giann Empleo, a full-stack developer building fast, reliable web applications.",
+          "The official portfolio of Francis Giann Empleo. View my latest full-stack projects, skills, and interactive experiences.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

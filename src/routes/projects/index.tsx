@@ -10,17 +10,17 @@ import { useRetroMode } from "@/hooks/use-retro-mode";
 export const Route = createFileRoute("/projects/")({
   head: () => ({
     meta: [
-      { title: `All Projects — ${profile.name}` },
+      { title: `All Projects | Francis Giann Empleo Portfolio` },
       {
         name: "description",
         content:
-          "All projects by Francis Giann Empleo — web applications, dashboards, and interactive experiences built with React, TypeScript, and Node.js.",
+          "Browse all projects in the portfolio of Francis Giann (Francis Empleo). See the latest web applications and interactive experiences built with React and TypeScript.",
       },
-      { property: "og:title", content: `All Projects — ${profile.name}` },
+      { property: "og:title", content: `All Projects | Francis Giann Empleo Portfolio` },
       {
         property: "og:description",
         content:
-          "All projects by Francis Giann Empleo — web applications, dashboards, and interactive experiences built with React, TypeScript, and Node.js.",
+          "Browse all projects in the portfolio of Francis Giann (Francis Empleo). See the latest web applications and interactive experiences built with React and TypeScript.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
