@@ -332,12 +332,12 @@ function ProjectDetailPage() {
         </article>
 
         <nav className="mt-20 border-t border-border pt-6" aria-label="Project navigation">
-          <div className="flex flex-wrap items-center justify-between gap-5">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:items-center sm:gap-4">
             <Link
               to="/projects/$projectId"
               params={{ projectId: previous.id }}
               viewTransition={{ types: ["route"] }}
-              className={linkClass}
+              className={`${linkClass} justify-self-start`}
             >
               <ArrowLeft className="h-4 w-4" aria-hidden />
               <span className="text-left">
@@ -347,19 +347,21 @@ function ProjectDetailPage() {
                 <span className="mt-1 block">{previous.title}</span>
               </span>
             </Link>
+            
             <Link
               to="/projects"
               viewTransition={{ types: ["route"] }}
-              className="font-pixel text-[10px] uppercase tracking-widest text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="order-3 mt-2 justify-self-center text-center font-pixel text-[10px] uppercase tracking-widest text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:order-2 sm:mt-0"
             >
               <span className="normal-cta-label">All projects</span>
               <span className="retro-cta-label">Stage select</span>
             </Link>
+            
             <Link
               to="/projects/$projectId"
               params={{ projectId: next.id }}
               viewTransition={{ types: ["route"] }}
-              className={`${linkClass} text-right`}
+              className={`${linkClass} order-2 justify-self-end text-right sm:order-3`}
             >
               <span className="text-right">
                 <span className="block text-xs uppercase tracking-widest text-muted-foreground">
