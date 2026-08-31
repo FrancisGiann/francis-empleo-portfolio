@@ -49,10 +49,9 @@ export function SiteNav() {
           <button
             type="button"
             onClick={(event) => {
-              const bounds = event.currentTarget.getBoundingClientRect();
               toggle({
-                x: bounds.left + bounds.width / 2,
-                y: bounds.top + bounds.height / 2,
+                x: event.clientX,
+                y: event.clientY,
               });
             }}
             disabled={isTransitioning}

@@ -692,8 +692,13 @@ html.retro::after {
   background-size: 100% 4px, 6px 100%;
   z-index: 9999;
   pointer-events: none;
-  animation: flicker 0.15s infinite;
   box-shadow: inset 0 0 80px rgba(0,0,0,0.25);
+}
+
+@media (min-width: 640px) {
+  html.retro::after {
+    animation: flicker 0.15s infinite;
+  }
 }
 
 @keyframes flicker {
@@ -761,6 +766,13 @@ html.retro h3 {
   font-family: var(--font-pixel);
   letter-spacing: 0.05em;
   text-shadow: 3px 0 0 red, -3px 0 0 cyan !important;
+  word-break: break-word;
+}
+
+@media (max-width: 640px) {
+  html.retro h1 {
+    font-size: 2rem !important;
+  }
 }
 
 /* ---- First-visit boot status ---- */

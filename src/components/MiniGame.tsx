@@ -51,6 +51,18 @@ export function MiniGame() {
     window.addEventListener("keydown", onKeyDown, { passive: false });
     window.addEventListener("keyup", onKeyUp);
     
+    const onTouchMove = (e: TouchEvent) => {
+      e.preventDefault(); // prevent scrolling
+      if (gameOver) return;
+      const rect = canvas.getBoundingClientRect();
+      const scaleY = H / rect.height;
+      const touchY = (e.touches[0].clientY - rect.top) * scaleY;
+      p1.y = Math.max(0, Math.min(H - p1.height, touchY - p1.height / 2));
+    };
+    
+    canvas.addEventListener("touchstart", onTouchMove, { passive: false });
+    canvas.addEventListener("touchmove", onTouchMove, { passive: false });
+    
     const playBeep = (freq: number = 800, type: OscillatorType = "square") => {
       try {
         const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -171,6 +183,8 @@ export function MiniGame() {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
       canvas.removeEventListener("click", onCanvasClick);
+      canvas.removeEventListener("touchstart", onTouchMove);
+      canvas.removeEventListener("touchmove", onTouchMove);
     };
   }, [enabled, isPlaying]);
 
@@ -186,7 +200,7 @@ export function MiniGame() {
         {!isPlaying ? (
           <div>
             <p className="mb-6 font-pixel text-sm text-foreground">
-              Use <span className="text-primary">↑ ↓</span> (Arrow Keys) to play.
+              Use <span className="text-primary">↑ ↓</span> or swipe screen to play.
             </p>
             <PixelButton href="#" onClick={(e: any) => { e.preventDefault(); setIsPlaying(true); }}>
               PLAY PONG
@@ -194,8 +208,14 @@ export function MiniGame() {
           </div>
         ) : (
           <div className="flex flex-col items-center gap-4">
-            <div className="flex justify-center border-[4px] border-foreground p-1 bg-black overflow-hidden relative mx-auto" style={{ width: "400px", height: "250px" }}>
-               <canvas ref={canvasRef} width={400} height={250} className="max-w-full" />
+            <div className="flex justify-center border-[4px] border-foreground p-1 bg-black overflow-hidden relative mx-auto w-full max-w-[400px]" style={{ height: "250px" }}>
+              <canvas
+                ref={canvasRef}
+                width={400}
+                height={250}
+                className="pixel-cursor outline-none touch-none w-full h-full object-contain"
+                tabIndex={0}
+              />
             </div>
             <PixelButton href="#" onClick={(e: any) => { e.preventDefault(); setIsPlaying(false); }}>
               QUIT GAME
