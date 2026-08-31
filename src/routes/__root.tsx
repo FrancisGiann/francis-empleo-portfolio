@@ -16,7 +16,7 @@ import { RetroModeProvider } from "../hooks/use-konami";
 import { useRetroMode } from "../hooks/use-retro-mode";
 import { ScrollProgress } from "../components/ScrollProgress";
 
-const BOOT_VERSION = "fge-boot-v1";
+const BOOT_VERSION = "fge-boot-v2";
 const BOOT_STORAGE_KEY = `portfolio-boot:${BOOT_VERSION}`;
 
 function NotFoundComponent() {
@@ -204,7 +204,7 @@ function BootSequence() {
         // The sequence remains a harmless one-time-per-mount status if storage is blocked.
       }
       setVisible(false);
-    }, 1150);
+    }, 2150);
 
     return () => {
       window.clearTimeout(timer);
