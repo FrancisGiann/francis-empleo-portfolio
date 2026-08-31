@@ -9,7 +9,6 @@ import GeneralLunaImg2 from "@/assets/project-generalluna-2.png";
 import GeneralLunaImg3 from "@/assets/project-generalluna-3.png";
 import GeneralLunaImg4 from "@/assets/project-generalluna-4.png";
 import FlowImg1 from "@/assets/project-flow1.png";
-import FlowImg2 from "@/assets/project-flow2.png";
 import FlowImg3 from "@/assets/project-flow3.png";
 import FlowImg4 from "@/assets/project-flow4.png";
 import KapeezImg1 from "@/assets/project-kapeez1.png";
@@ -200,7 +199,6 @@ export const projects: Project[] = [
   status: "live",
   images: [
     FlowImg1,
-    FlowImg2,
     FlowImg3,
     FlowImg4
   ],
@@ -366,7 +364,7 @@ export const profile = {
   email: "francisgiann25@gmail.com",
   github: "https://github.com/FrancisGiann",
   githubUsername: "FrancisGiann",
-  linkedin: "https://www.linkedin.com/",
+  linkedin: "https://www.linkedin.com/in/francisgiann/",
 };
 
 export const skillGroups: { label: string; skills: string[] }[] = [

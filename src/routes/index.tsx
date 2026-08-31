@@ -5,6 +5,7 @@ import { AboutSkills } from "@/components/AboutSkills";
 import { ProjectCarousel } from "@/components/ProjectCarousel";
 import { NowSection } from "@/components/NowSection";
 import { GitHubActivity } from "@/components/GitHubActivity";
+import { ContactSection } from "@/components/ContactSection";
 import { SiteFooter } from "@/components/SiteFooter";
 import { profile } from "@/data/projects";
 
@@ -43,6 +44,8 @@ function Index() {
         <NowSection />
         <hr className="divider-dotted mx-auto max-w-6xl" />
         <GitHubActivity />
+        <hr className="divider-dotted mx-auto max-w-6xl" />
+        <ContactSection />
       </main>
       <SiteFooter />
     </div>

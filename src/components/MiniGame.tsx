@@ -55,8 +55,13 @@ export function MiniGame() {
       try {
         const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
         const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
         osc.type = type;
-        osc.connect(audioCtx.destination);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.05);
@@ -77,7 +82,7 @@ export function MiniGame() {
         const msg = p1.score >= 10 ? "YOU WIN!" : "GAME OVER";
         ctx.fillText(msg, W / 2 - 80, H / 2);
         ctx.font = "16px 'Silkscreen', monospace";
-        ctx.fillText("Click QUIT to restart", W / 2 - 110, H / 2 + 40);
+        ctx.fillText("Click screen to restart", W / 2 - 115, H / 2 + 40);
         return; // stop loop
       }
       
@@ -143,6 +148,21 @@ export function MiniGame() {
       
     };
     
+    const onCanvasClick = () => {
+      if (gameOver) {
+        gameOver = false;
+        p1.score = 0;
+        p2.score = 0;
+        ball.x = W / 2;
+        ball.y = H / 2;
+        ball.dx = 4;
+        ball.dy = 4;
+        loop();
+      }
+    };
+    
+    canvas.addEventListener("click", onCanvasClick);
+    
     loop();
     
     return () => {
@@ -150,6 +170,7 @@ export function MiniGame() {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
+      canvas.removeEventListener("click", onCanvasClick);
     };
   }, [enabled, isPlaying]);
 
@@ -158,13 +179,15 @@ export function MiniGame() {
   return (
     <div className="retro-inventory mt-12 mb-8">
       <div className="pixel-step border border-primary/50 bg-card p-5 text-center">
-        <h3 className="font-pixel text-[14px] uppercase tracking-widest text-primary mb-4">
+        <h3 className="font-pixel text-lg uppercase tracking-widest text-primary mb-4">
           MINI-GAME UNLOCKED
         </h3>
         
         {!isPlaying ? (
           <div>
-            <p className="mb-6 font-pixel text-xs text-muted-foreground">Use Arrow Up/Down to play.</p>
+            <p className="mb-6 font-pixel text-sm text-foreground">
+              Use <span className="text-primary">↑ ↓</span> (Arrow Keys) to play.
+            </p>
             <PixelButton href="#" onClick={(e: any) => { e.preventDefault(); setIsPlaying(true); }}>
               PLAY PONG
             </PixelButton>

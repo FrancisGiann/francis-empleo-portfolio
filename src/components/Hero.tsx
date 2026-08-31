@@ -21,6 +21,7 @@ export function Hero() {
         aria-hidden
         className="ambient-glow pointer-events-none absolute -top-32 right-[-10%] h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl"
       />
+
       {/* Floating pixel particles behind everything */}
       <PixelParticles />
 

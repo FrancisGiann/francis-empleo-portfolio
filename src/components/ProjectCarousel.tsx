@@ -76,12 +76,11 @@ export function ProjectCarousel() {
             Showing project {index + 1} of {count}: {project.title}
           </div>
           <div
-            key={project.id}
             id={panelId}
             role="tabpanel"
             tabIndex={0}
             aria-labelledby={`project-tab-${project.id}`}
-            className="project-card-enter focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
           >
             <ProjectCard project={project} />
           </div>

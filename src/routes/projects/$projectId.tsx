@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNav } from "@/components/SiteNav";
@@ -39,6 +40,7 @@ const buttonClass =
 function ProjectDetailPage() {
   const { project } = Route.useLoaderData();
   const { enabled: retro } = useRetroMode();
+  const [photoIndex, setPhotoIndex] = useState(0);
   const projectIndex = projects.findIndex((item) => item.id === project.id);
   const previous = projects[(projectIndex - 1 + projects.length) % projects.length]!;
   const next = projects[(projectIndex + 1) % projects.length]!;
@@ -90,18 +92,59 @@ function ProjectDetailPage() {
 
           <Reveal delay={100}>
             <figure className="project-detail-media mt-12">
-              <div className="pixel-step cartridge-frame overflow-hidden border border-border bg-card">
-                <img
-                  src={project.images[0]}
-                  alt={project.imageAlt}
-                  width={1280}
-                  height={800}
-                  fetchPriority="high"
-                  className="aspect-[8/5] h-full w-full object-cover"
-                />
+              <div className="pixel-step cartridge-frame relative overflow-hidden border border-border bg-card aspect-[8/5]">
+                {project.images.map((src, i) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt={i === photoIndex ? project.imageAlt : ""}
+                    aria-hidden={i !== photoIndex}
+                    width={1280}
+                    height={800}
+                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                      i === photoIndex ? "opacity-100" : "pointer-events-none opacity-0"
+                    }`}
+                  />
+                ))}
+                
+                {project.images.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setPhotoIndex(i => (i - 1 + project.images.length) % project.images.length)}
+                      className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-border bg-background/80 text-foreground backdrop-blur-sm transition-all duration-200 hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <ChevronLeft className="h-5 w-5" aria-hidden />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPhotoIndex(i => (i + 1) % project.images.length)}
+                      className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-border bg-background/80 text-foreground backdrop-blur-sm transition-all duration-200 hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <ChevronRight className="h-5 w-5" aria-hidden />
+                    </button>
+                    
+                    <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
+                      {project.images.map((_, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => setPhotoIndex(i)}
+                          className="flex h-3 w-3 items-center justify-center focus-visible:outline-none"
+                        >
+                          <span
+                            className={`block h-full w-full rounded-none transition-colors ${
+                              i === photoIndex ? "bg-primary" : "bg-background/70 hover:bg-foreground/50"
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
               <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
-                <span>Project screenshot // primary view</span>
+                <span>Project screenshot {photoIndex + 1} of {project.images.length}</span>
                 <span>
                   {project.images.length} {project.images.length === 1 ? "view" : "views"} in the
                   project media set
@@ -165,7 +208,9 @@ function ProjectDetailPage() {
                             <span className="font-pixel text-[10px] text-primary">
                               {String(index + 1).padStart(2, "0")}
                             </span>
-                            <h3 className="font-semibold">{node.label}</h3>
+                            <h3 className="font-semibold">
+                              {node.label}
+                            </h3>
                           </div>
                           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                             {node.description}

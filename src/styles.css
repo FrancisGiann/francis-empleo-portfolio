@@ -498,6 +498,13 @@ html:not(.theme-transition)::view-transition-new(root) {
   position: relative;
 }
 
+html.retro .architecture-node h3 {
+  font-size: 0.65rem;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-shadow: 1px 0 0 red, -1px 0 0 cyan !important;
+}
+
 @media (min-width: 48rem) {
   .architecture-flow {
     display: flex;
@@ -720,7 +727,7 @@ html.retro p, html.retro span, html.retro a, html.retro li {
 /* Chunky 8-bit UI Borders */
 html.retro .pixel-step,
 html.retro .pixel-step-sm,
-html.retro button,
+html.retro button:not(.project-photo-control):not(.photo-dot),
 html.retro [role="dialog"],
 html.retro .project-card,
 html.retro .bg-card,
@@ -729,6 +736,17 @@ html.retro canvas {
   border: 4px solid var(--foreground) !important;
   box-shadow: 6px 6px 0px var(--foreground) !important;
   clip-path: none !important;
+  border-radius: 0 !important;
+}
+
+html.retro .project-photo-control {
+  border-radius: 0 !important;
+  border: 2px solid var(--foreground) !important;
+  background: var(--background) !important;
+  opacity: 1 !important;
+}
+
+html.retro .photo-dot {
   border-radius: 0 !important;
 }
 

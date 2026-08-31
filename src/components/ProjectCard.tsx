@@ -24,6 +24,10 @@ export function ProjectCard({ project, reversed = false }: ProjectCardProps) {
   };
 
   useEffect(() => {
+    setPhotoIndex(0);
+  }, [project.id]);
+
+  useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setReducedMotion(query.matches);
     update();
@@ -56,7 +60,11 @@ export function ProjectCard({ project, reversed = false }: ProjectCardProps) {
   return (
     <article
       aria-labelledby={`project-title-${project.id}`}
-      className="project-card grid items-center gap-8 md:grid-cols-[minmax(0,1.65fr)_minmax(260px,0.85fr)] md:gap-12"
+      className={`project-card grid items-center gap-8 md:gap-12 ${
+        reversed 
+          ? "md:grid-cols-[minmax(260px,0.85fr)_minmax(0,1.65fr)]" 
+          : "md:grid-cols-[minmax(0,1.65fr)_minmax(260px,0.85fr)]"
+      }`}
     >
       <div className={reversed ? "md:order-2" : ""}>
         <div className="project-media">
