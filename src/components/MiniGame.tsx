@@ -194,7 +194,7 @@ export function MiniGame() {
   return (
     <div className="retro-inventory mt-12 mb-8">
       {/* ── Handheld Console Shell ── */}
-      <div className="mx-auto w-full max-w-[380px]">
+      <div className="mx-auto w-full max-w-[380px] sm:max-w-[480px] md:max-w-[540px]">
         <div
           className="relative overflow-hidden border-2 border-foreground/50 bg-[hsl(var(--muted))] px-5 pb-6 pt-4 shadow-[4px_4px_0_var(--foreground)]"
           style={{ borderRadius: "12px 12px 40px 40px" }}
@@ -250,53 +250,53 @@ export function MiniGame() {
           </div>
 
           {/* ── Controls Area ── */}
-          <div className="mt-5 flex items-start justify-between px-2">
+          <div className="mt-5 flex items-start justify-between px-2 sm:mt-7 sm:px-6">
             {/* D-Pad (left side) */}
-            <div className="relative h-[100px] w-[100px] select-none touch-none" aria-label="D-Pad controls">
+            <div className="relative h-[100px] w-[100px] sm:h-[120px] sm:w-[120px] select-none touch-none" aria-label="D-Pad controls">
               {/* Cross shape */}
-              <div className="absolute left-1/2 top-0 h-full w-[34px] -translate-x-1/2 rounded-[3px] border border-foreground/40 bg-foreground/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]" />
-              <div className="absolute top-1/2 left-0 h-[34px] w-full -translate-y-1/2 rounded-[3px] border border-foreground/40 bg-foreground/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]" />
+              <div className="absolute left-1/2 top-0 h-full w-[34px] sm:w-[40px] -translate-x-1/2 rounded-[3px] border border-foreground/40 bg-foreground/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]" />
+              <div className="absolute top-1/2 left-0 h-[34px] sm:h-[40px] w-full -translate-y-1/2 rounded-[3px] border border-foreground/40 bg-foreground/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)]" />
               <div className="absolute left-1/2 top-1/2 z-10 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/15" />
               {/* Up */}
               <button type="button" onPointerDown={(e) => { e.preventDefault(); steer(0, -1); }}
-                className="absolute left-1/2 top-0 z-20 flex h-[33px] w-[34px] -translate-x-1/2 items-center justify-center text-foreground/40 active:text-primary transition-colors" aria-label="Up">
+                className="absolute left-1/2 top-0 z-20 flex h-[33px] sm:h-[40px] w-[34px] sm:w-[40px] -translate-x-1/2 items-center justify-center text-foreground/40 active:text-primary transition-colors cursor-pointer" aria-label="Up">
                 <svg width="14" height="8" viewBox="0 0 14 8" fill="currentColor"><polygon points="7,0 14,8 0,8" /></svg>
               </button>
               {/* Down */}
               <button type="button" onPointerDown={(e) => { e.preventDefault(); steer(0, 1); }}
-                className="absolute left-1/2 bottom-0 z-20 flex h-[33px] w-[34px] -translate-x-1/2 items-center justify-center text-foreground/40 active:text-primary transition-colors" aria-label="Down">
+                className="absolute left-1/2 bottom-0 z-20 flex h-[33px] sm:h-[40px] w-[34px] sm:w-[40px] -translate-x-1/2 items-center justify-center text-foreground/40 active:text-primary transition-colors cursor-pointer" aria-label="Down">
                 <svg width="14" height="8" viewBox="0 0 14 8" fill="currentColor"><polygon points="0,0 14,0 7,8" /></svg>
               </button>
               {/* Left */}
               <button type="button" onPointerDown={(e) => { e.preventDefault(); steer(-1, 0); }}
-                className="absolute top-1/2 left-0 z-20 flex h-[34px] w-[33px] -translate-y-1/2 items-center justify-center text-foreground/40 active:text-primary transition-colors" aria-label="Left">
+                className="absolute top-1/2 left-0 z-20 flex h-[34px] sm:h-[40px] w-[33px] sm:w-[40px] -translate-y-1/2 items-center justify-center text-foreground/40 active:text-primary transition-colors cursor-pointer" aria-label="Left">
                 <svg width="8" height="14" viewBox="0 0 8 14" fill="currentColor"><polygon points="0,7 8,0 8,14" /></svg>
               </button>
               {/* Right */}
               <button type="button" onPointerDown={(e) => { e.preventDefault(); steer(1, 0); }}
-                className="absolute top-1/2 right-0 z-20 flex h-[34px] w-[33px] -translate-y-1/2 items-center justify-center text-foreground/40 active:text-primary transition-colors" aria-label="Right">
+                className="absolute top-1/2 right-0 z-20 flex h-[34px] sm:h-[40px] w-[33px] sm:w-[40px] -translate-y-1/2 items-center justify-center text-foreground/40 active:text-primary transition-colors cursor-pointer" aria-label="Right">
                 <svg width="8" height="14" viewBox="0 0 8 14" fill="currentColor"><polygon points="8,7 0,0 0,14" /></svg>
               </button>
             </div>
 
             {/* Action buttons (right side) */}
             <div className="flex flex-col items-center gap-3 pt-1">
-              <div className="flex -rotate-[20deg] gap-3">
+              <div className="flex -rotate-[20deg] gap-3 sm:gap-4">
                 {/* B button — QUIT */}
                 <div className="flex flex-col items-center gap-1">
                   <button
                     type="button"
                     onClick={() => setIsPlaying(false)}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-foreground/40 bg-foreground/10 font-pixel text-sm text-foreground/60 shadow-[inset_0_-2px_3px_rgba(0,0,0,0.2),0_2px_0_rgba(255,255,255,0.05)] transition-colors active:bg-destructive/30 active:text-destructive select-none touch-none"
+                    className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 border-foreground/40 bg-foreground/10 font-pixel text-sm sm:text-base text-foreground/60 shadow-[inset_0_-2px_3px_rgba(0,0,0,0.2),0_2px_0_rgba(255,255,255,0.05)] transition-colors active:bg-destructive/30 active:text-destructive hover:bg-foreground/15 cursor-pointer select-none touch-none"
                   >
                     B
                   </button>
                   <span className="font-pixel text-[7px] uppercase tracking-widest text-muted-foreground">quit</span>
                 </div>
-                {/* A button (decorative / future use) */}
+                {/* A button (decorative) */}
                 <div className="flex flex-col items-center gap-1">
                   <div
-                    className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-foreground/40 bg-foreground/10 font-pixel text-sm text-foreground/60 shadow-[inset_0_-2px_3px_rgba(0,0,0,0.2),0_2px_0_rgba(255,255,255,0.05)]"
+                    className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 border-foreground/40 bg-foreground/10 font-pixel text-sm sm:text-base text-foreground/60 shadow-[inset_0_-2px_3px_rgba(0,0,0,0.2),0_2px_0_rgba(255,255,255,0.05)]"
                   >
                     A
                   </div>
@@ -307,7 +307,7 @@ export function MiniGame() {
           </div>
 
           {/* Speaker grille */}
-          <div className="mx-auto mt-4 flex w-16 -rotate-[25deg] flex-col gap-[3px]">
+          <div className="mx-auto mt-4 flex w-16 sm:w-20 -rotate-[25deg] flex-col gap-[3px]">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="h-[2px] w-full rounded-full bg-foreground/15" />
             ))}
