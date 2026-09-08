@@ -401,15 +401,10 @@ function MetaItem({ label, value }: { label: string; value: string }) {
 
 function SectionHeading({ id, eyebrow, retro }: { id: string; eyebrow: string; retro: string }) {
   return (
-    <>
-      <p className="font-pixel text-xs uppercase tracking-[0.2em] text-primary">
-        <span className="normal-eyebrow">{eyebrow}</span>
-        <span className="retro-eyebrow">{retro}</span>
-      </p>
-      <h2 id={id} className="mt-2 text-2xl font-bold tracking-tight">
-        {eyebrow}
-      </h2>
-    </>
+    <h2 id={id} className="font-pixel text-xs uppercase tracking-[0.2em] text-primary">
+      <span className="normal-eyebrow">{eyebrow}</span>
+      <span className="retro-eyebrow">{retro}</span>
+    </h2>
   );
 }
 
