@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { ProjectShowcase } from "@/components/ProjectShowcase";
+import { ProjectGallery } from "@/components/ProjectGallery";
 import { Reveal } from "@/components/Reveal";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNav } from "@/components/SiteNav";
@@ -90,7 +91,40 @@ function ProjectDetailPage() {
           </Reveal>
 
           <Reveal delay={120}>
-            <section className="mt-8 flex flex-col gap-4 border-y border-border py-6 sm:flex-row sm:items-center sm:justify-between">
+            <section
+              aria-labelledby="project-work-heading"
+              className="mt-8 grid gap-8 border-y border-border py-7 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]"
+            >
+              <div>
+                <p className="font-pixel text-[11px] uppercase tracking-[0.2em] text-primary">
+                  Project notes
+                </p>
+                <h2 id="project-work-heading" className="mt-2 text-xl font-semibold tracking-tight">
+                  What I worked on
+                </h2>
+                <p className="mt-3 max-w-prose leading-relaxed text-muted-foreground">
+                  {project.contribution}
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold">What it includes</h3>
+                <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-muted-foreground">
+                  {project.features.map((feature) => (
+                    <li key={feature} className="flex gap-2">
+                      <span className="mt-[0.55em] h-1.5 w-1.5 shrink-0 bg-primary" aria-hidden />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </section>
+          </Reveal>
+
+          <ProjectGallery project={project} />
+
+          <Reveal delay={160}>
+            <section className="mt-8 flex flex-col gap-5 border-y border-border py-6 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-sm font-semibold">Built with</h2>
                 <div className="mt-3 flex flex-wrap gap-2">

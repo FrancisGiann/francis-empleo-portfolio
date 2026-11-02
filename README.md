@@ -7,8 +7,8 @@ Live portfolio: [francisgiann.vercel.app](https://francisgiann.vercel.app)
 ## Features
 
 - Responsive home, projects, and `/projects/:projectId` detail routes with router-level 404 handling.
-- A curated Selected Projects grid with concise summaries, clear status labels, and a link to all public GitHub repositories.
-- Project-branded screenshot showcases in browser and phone frames, with short, factual project detail pages.
+- A curated Selected Projects grid where every card states the project's purpose and a scoped contribution, with clear status and screenshot-gallery links.
+- Project-branded cover images plus concise feature notes and captioned, evidence-backed screen galleries; capture gaps are disclosed in the detail page.
 - Light/dark theme with a pixel-ripple transition and persisted preference.
 - Discoverable 8-bit mode, with the Konami sequence `↑ ↑ ↓ ↓ ← → ← → B A` as a keyboard shortcut.
 - Typewriter hero, pixel-photo hover preview, ambient particles, segmented scroll progress, and reveal and magnetic interactions.
@@ -83,7 +83,7 @@ Each project is customized from one entry in `src/data/projects.ts`. Add verifie
 
 ## Accessibility and performance
 
-The interface supports keyboard controls and visible focus states, uses descriptive image alt text, respects `prefers-reduced-motion`, and lazy-loads project imagery. Internal route transitions use native View Transitions when available and fall back to normal router navigation.
+The interface supports keyboard controls and visible focus states, uses descriptive image alt text, respects `prefers-reduced-motion`, and lazy-loads project imagery. The screenshot viewer supports arrow keys, touch swipes, Escape, browser-back dismissal, focus trapping, and focus return. Internal route transitions use native View Transitions when available and fall back to normal router navigation.
 
 ## Production
 

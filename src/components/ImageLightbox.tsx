@@ -1,106 +1,205 @@
-import { useEffect, useState, useCallback } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type TouchEvent as ReactTouchEvent,
+} from "react";
 import { createPortal } from "react-dom";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import type { ProjectScreenshot } from "@/data/projects";
 
 export interface ImageLightboxProps {
-  images: string[];
+  screenshots: ProjectScreenshot[];
   initialIndex: number;
-  alt: string;
   onClose: () => void;
 }
 
-export function ImageLightbox({ images, initialIndex, alt, onClose }: ImageLightboxProps) {
+export function ImageLightbox({ screenshots, initialIndex, onClose }: ImageLightboxProps) {
   const [mounted, setMounted] = useState(false);
   const [index, setIndex] = useState(initialIndex);
-  const count = images.length;
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const titleId = useId();
+  const historyMarker = `project-gallery-${useId()}`;
+  const count = screenshots.length;
 
-  const prev = useCallback(() => setIndex((i) => (i - 1 + count) % count), [count]);
-  const next = useCallback(() => setIndex((i) => (i + 1) % count), [count]);
+  const prev = useCallback(() => {
+    setIndex((current) => (current - 1 + count) % count);
+  }, [count]);
+  const next = useCallback(() => {
+    setIndex((current) => (current + 1) % count);
+  }, [count]);
 
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(raf);
-  }, []);
+  const requestClose = useCallback(() => {
+    const state = window.history.state;
+    if (state && typeof state === "object" && state[historyMarker]) {
+      window.history.back();
+      return;
+    }
+    onClose();
+  }, [historyMarker, onClose]);
 
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
+    const previousFocus =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const oldState = window.history.state;
+    const currentState = oldState && typeof oldState === "object" ? oldState : {};
+
+    window.history.pushState({ ...currentState, [historyMarker]: true }, "", window.location.href);
     document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = originalOverflow;
+
+    const focusFrame = requestAnimationFrame(() => closeButtonRef.current?.focus());
+    const handlePopState = () => {
+      const state = window.history.state;
+      if (!state || typeof state !== "object" || !state[historyMarker]) onClose();
     };
-  }, []);
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      cancelAnimationFrame(focusFrame);
+      window.removeEventListener("popstate", handlePopState);
+      document.body.style.overflow = originalOverflow;
+      const state = window.history.state;
+      if (state && typeof state === "object" && state[historyMarker]) {
+        const cleanedState = { ...state };
+        delete cleanedState[historyMarker];
+        window.history.replaceState(cleanedState, "", window.location.href);
+      }
+      previousFocus?.focus();
+    };
+  }, [historyMarker, onClose]);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      else if (e.key === "ArrowLeft") prev();
-      else if (e.key === "ArrowRight") next();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, prev, next]);
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      requestClose();
+    } else if (event.key === "ArrowLeft" && count > 1) {
+      event.preventDefault();
+      prev();
+    } else if (event.key === "ArrowRight" && count > 1) {
+      event.preventDefault();
+      next();
+    } else if (event.key === "Tab") {
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+      );
+      const items = focusable ? Array.from(focusable) : [];
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  };
+
+  const handleTouchStart = (event: ReactTouchEvent<HTMLDivElement>) => {
+    const touch = event.changedTouches[0];
+    touchStartRef.current = touch ? { x: touch.clientX, y: touch.clientY } : null;
+  };
+
+  const handleTouchEnd = (event: ReactTouchEvent<HTMLDivElement>) => {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+    const touch = event.changedTouches[0];
+    if (!start || !touch || count < 2) return;
+
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+    if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+    if (deltaX < 0) next();
+    else prev();
+  };
+
+  const screenshot = screenshots[index];
+  if (!screenshot) return null;
 
   const content = (
     <div
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
-      aria-label="Image lightbox"
-      onClick={onClose}
-      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm transition-opacity duration-200 sm:p-8 ${
+      aria-labelledby={titleId}
+      tabIndex={-1}
+      onKeyDown={handleKeyDown}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) requestClose();
+      }}
+      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm transition-opacity duration-200 motion-reduce:transition-none sm:p-8 ${
         mounted ? "opacity-100" : "opacity-0"
       }`}
     >
       <button
+        ref={closeButtonRef}
         type="button"
-        onClick={onClose}
-        aria-label="Close image viewer"
+        onClick={requestClose}
+        aria-label="Close viewer and return to the project gallery"
         className="absolute right-4 top-4 z-[10000] flex h-11 w-11 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <X className="h-6 w-6" aria-hidden />
       </button>
 
-      {count > 1 && (
+      {count > 1 ? (
         <>
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); prev(); }}
-            aria-label="Previous image"
+            onClick={prev}
+            aria-label="Previous screenshot"
             className="absolute left-3 top-1/2 z-[10000] flex h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:left-6"
           >
             <ChevronLeft className="h-6 w-6" aria-hidden />
           </button>
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); next(); }}
-            aria-label="Next image"
+            onClick={next}
+            aria-label="Next screenshot"
             className="absolute right-3 top-1/2 z-[10000] flex h-12 w-12 -translate-y-1/2 items-center justify-center border border-white/20 bg-black/60 text-white transition-colors hover:border-primary hover:bg-black/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:right-6"
           >
             <ChevronRight className="h-6 w-6" aria-hidden />
           </button>
         </>
-      )}
+      ) : null}
 
       <div
-        className="relative flex h-full w-full max-h-[90vh] max-w-[90vw] items-center justify-center"
-        onClick={(e) => e.stopPropagation()}
+        className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-4 pb-12 pt-12 sm:pb-14"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onClick={(event) => event.stopPropagation()}
       >
         <img
-          src={images[index]}
-          alt={alt}
-          className="max-h-[90vh] max-w-[90vw] select-none object-contain shadow-2xl"
+          src={screenshot.src}
+          alt={screenshot.alt}
+          loading="eager"
+          decoding="async"
+          draggable={false}
+          className="max-h-[76vh] max-w-full select-none object-contain shadow-2xl"
         />
-      </div>
-
-      {count > 1 && (
-        <div
-          className="absolute bottom-6 left-1/2 z-[10000] flex -translate-x-1/2 items-center gap-2"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <span className="font-pixel text-xs tracking-widest text-white/70">
-            {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
-          </span>
+        <div className="max-w-3xl text-center text-white">
+          <h2 id={titleId} className="sr-only">
+            {screenshot.caption}
+          </h2>
+          <p className="text-sm leading-relaxed text-white/85">{screenshot.caption}</p>
+          {count > 1 ? (
+            <p aria-live="polite" className="mt-2 font-pixel text-xs tracking-widest text-white/60">
+              {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+            </p>
+          ) : null}
         </div>
-      )}
+      </div>
     </div>
   );
 
