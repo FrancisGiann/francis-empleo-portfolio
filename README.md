@@ -2,14 +2,16 @@
 
 A modern, responsive full-stack developer portfolio with a restrained pixel-art identity and an optional 8-bit mode. It presents selected work, skills, GitHub activity, and in-progress experiments in a focused, accessible interface.
 
+Live portfolio: [francisgiann.vercel.app](https://francisgiann.vercel.app)
+
 ## Features
 
-- Responsive home, projects, and `/projects/:projectId` case-study routes with router-level 404 handling.
+- Responsive home, projects, and `/projects/:projectId` detail routes with router-level 404 handling.
+- A curated Selected Projects grid with concise summaries, clear status labels, and a link to all public GitHub repositories.
+- Project-branded screenshot showcases in browser and phone frames, with short, factual project detail pages.
 - Light/dark theme with a pixel-ripple transition and persisted preference.
 - Discoverable 8-bit mode, with the Konami sequence `↑ ↑ ↓ ↓ ← → ← → B A` as a keyboard shortcut.
 - Typewriter hero, pixel-photo hover preview, ambient particles, segmented scroll progress, and reveal and magnetic interactions.
-- Playable project cartridges with engagement-aware screenshot cycling, touch/keyboard controls, and internal case studies.
-- Data-driven case studies with architecture flow, technology decisions, comparisons, timelines, and optional outcome/performance sections.
 - A short first-visit boot status (`FGE_OS v1.0`) that skips on repeat visits and reduced-motion preferences.
 - Retro-only stage labels, skill inventory, player-status footer, and a code-native pixel avatar.
 - Live GitHub contribution calendar.
@@ -62,9 +64,9 @@ src/
 ├── routes/
 │   ├── __root.tsx    # Root shell and shared providers
 │   ├── index.tsx     # Home route
-│   ├── projects.tsx  # Projects route
+│   ├── projects.tsx  # Selected projects route
 │   └── projects/
-│       └── $projectId.tsx # Dynamic case-study route
+│       └── $projectId.tsx # Dynamic project detail route
 ├── styles.css        # Theme tokens, typography, pixel styling, and motion
 └── server.ts         # TanStack Start server entry
 public/               # Static assets such as the favicon and robots.txt
@@ -72,16 +74,16 @@ public/               # Static assets such as the favicon and robots.txt
 
 ## Customization
 
-- Personal profile, projects, skills, current items, and structured case studies: `src/data/projects.ts`
+- Personal profile, project summaries and status, skills, and current items: `src/data/projects.ts`
 - Images: `src/assets/`
 - Color, type, and motion: `src/styles.css`
 - Page metadata: `src/routes/index.tsx`, `src/routes/projects.tsx`, `src/routes/projects/$projectId.tsx`, `src/routes/__root.tsx`
 
-Each project is customized from one entry in `src/data/projects.ts`. Add verified `external.repo` or `external.demo` values only when those URLs are real; the UI omits those actions when they are absent. The structured case-study fields are intentionally qualitative drafts until the real role, dates, measurements, outcomes, and project links are supplied.
+Each project is customized from one entry in `src/data/projects.ts`. Add verified `external.repo` or `external.demo` values only when those URLs are public; the UI omits those actions when they are absent.
 
 ## Accessibility and performance
 
-The interface supports keyboard controls and visible focus states, uses descriptive image alt text, respects `prefers-reduced-motion`, pauses carousel timers when not engaged or when the document is hidden, and lazy-loads project imagery. Internal route transitions use native View Transitions when available and fall back to normal router navigation.
+The interface supports keyboard controls and visible focus states, uses descriptive image alt text, respects `prefers-reduced-motion`, and lazy-loads project imagery. Internal route transitions use native View Transitions when available and fall back to normal router navigation.
 
 ## Production
 
@@ -96,4 +98,4 @@ The build produces a `.output/` artifact, which is ignored by Git.
 
 ## Status
 
-Project content and URLs are still being personalized. Current project entries and case-study sections are qualitative drafts/placeholders and should not be treated as finished public case studies until the real project details, repository/demo links, role, timeframe, measured performance, and outcomes are added.
+Project entries summarize selected work and label each project's current status. Confirm repository and demo URLs are public before adding them to the site.

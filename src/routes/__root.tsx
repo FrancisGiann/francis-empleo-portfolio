@@ -8,12 +8,11 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import { ThemeProvider, useTheme } from "../hooks/use-theme";
 import { RetroModeProvider } from "../hooks/use-konami";
-import { useRetroMode } from "../hooks/use-retro-mode";
 import { ScrollProgress } from "../components/ScrollProgress";
 
 const BOOT_VERSION = "fge-boot-v2";
@@ -146,7 +145,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <RetroModeProvider>
-          <KonamiWatcher />
+          <ThemedToaster />
           <ScrollProgress />
           <BootSequence />
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
@@ -157,28 +156,8 @@ function RootComponent() {
   );
 }
 
-function KonamiWatcher() {
+function ThemedToaster() {
   const { theme } = useTheme();
-  const { enabled } = useRetroMode();
-
-  useEffect(() => {
-    // Check if retro mode was ever discovered this session or previously
-    const hasDiscovered = localStorage.getItem("konami-retro") === "1";
-    
-    if (!enabled && !hasDiscovered) {
-      const timer = setTimeout(() => {
-        toast("SYSTEM MESSAGE", {
-          description: "Hint: Try typing ↑ ↑ ↓ ↓ ← → ← → B A",
-          className: "font-pixel",
-          duration: 8000,
-        });
-      }, 15000); // Trigger after 15 seconds of viewing the site
-      
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [enabled]);
-
   return <Toaster theme={theme} position="bottom-right" />;
 }
 

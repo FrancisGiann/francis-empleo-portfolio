@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteNav } from "@/components/SiteNav";
 import { Hero } from "@/components/Hero";
 import { AboutSkills } from "@/components/AboutSkills";
-import { ProjectCarousel } from "@/components/ProjectCarousel";
+import { SelectedProjects } from "@/components/SelectedProjects";
 import { NowSection } from "@/components/NowSection";
 import { GitHubActivity } from "@/components/GitHubActivity";
 import { ContactSection } from "@/components/ContactSection";
@@ -12,17 +12,17 @@ import { profile } from "@/data/projects";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Francis Giann Empleo | Web Developer Portfolio" },
+      { title: "Francis Giann Empleo | Full-Stack Developer" },
       {
         name: "description",
         content:
-          "Welcome to the web developer portfolio of Francis Giann (Francis Empleo). View my latest full-stack projects, skills, and interactive experiences.",
+          "Web and Android projects by Francis Giann Empleo, built with React, Flutter, Node.js, PHP and databases.",
       },
-      { property: "og:title", content: "Francis Giann Empleo | Web Developer Portfolio" },
+      { property: "og:title", content: "Francis Giann Empleo | Full-Stack Developer" },
       {
         property: "og:description",
         content:
-          "Welcome to the web developer portfolio of Francis Giann (Francis Empleo). View my latest full-stack projects, skills, and interactive experiences.",
+          "Web and Android projects by Francis Giann Empleo, built with React, Flutter, Node.js, PHP and databases.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -37,9 +37,9 @@ function Index() {
       <SiteNav />
       <main>
         <Hero />
+        <SelectedProjects />
         <hr className="divider-dotted mx-auto max-w-6xl" />
         <AboutSkills />
-        <ProjectCarousel />
         <hr className="divider-dotted mx-auto max-w-6xl" />
         <NowSection />
         <hr className="divider-dotted mx-auto max-w-6xl" />

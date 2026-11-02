@@ -1,26 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ProjectCard } from "@/components/ProjectCard";
-import { Reveal } from "@/components/Reveal";
-import { liveProjects, profile, wipProjects } from "@/data/projects";
-import { useRetroMode } from "@/hooks/use-retro-mode";
+import { projects, profile } from "@/data/projects";
+import { GITHUB_REPOSITORIES_URL } from "@/components/SelectedProjects";
 
 export const Route = createFileRoute("/projects/")({
   head: () => ({
     meta: [
-      { title: `All Projects | Francis Giann Empleo Portfolio` },
+      { title: `Selected Projects | ${profile.name}` },
       {
         name: "description",
         content:
-          "Browse all projects in the portfolio of Francis Giann (Francis Empleo). See the latest web applications and interactive experiences built with React and TypeScript.",
+          "A selection of web, Android, and developer-tool projects by Francis Giann Empleo.",
       },
-      { property: "og:title", content: `All Projects | Francis Giann Empleo Portfolio` },
+      { property: "og:title", content: `Selected Projects | ${profile.name}` },
       {
         property: "og:description",
         content:
-          "Browse all projects in the portfolio of Francis Giann (Francis Empleo). See the latest web applications and interactive experiences built with React and TypeScript.",
+          "A selection of web, Android, and developer-tool projects by Francis Giann Empleo.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -30,67 +29,49 @@ export const Route = createFileRoute("/projects/")({
 });
 
 function ProjectsPage() {
-  const { enabled: retro } = useRetroMode();
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteNav />
-      <main className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <Reveal>
-          <Link
-            to="/"
-            viewTransition={{ types: ["route"] }}
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden />
-            <span className="normal-cta-label">Back home</span>
-            <span className="retro-cta-label">Back to map</span>
-          </Link>
-          <p
-            className="mt-8 font-pixel text-xs uppercase tracking-[0.25em] text-primary"
-            aria-label={retro ? "Level 02, select stage" : "Projects"}
-          >
-            <span className="normal-eyebrow">Projects</span>
-            <span className="retro-eyebrow">LEVEL 02 · SELECT STAGE</span>
-          </p>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">All projects</h1>
-          <p className="mt-3 max-w-xl text-muted-foreground">
-            Everything I've shipped or am actively building — from client work to side projects.
-          </p>
-        </Reveal>
+      <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+        <Link
+          to="/"
+          viewTransition={{ types: ["route"] }}
+          className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          <span className="normal-cta-label">Home</span>
+          <span className="retro-cta-label">Back to map</span>
+        </Link>
 
-        <div className="mt-14 space-y-20">
-          {liveProjects.map((project, i) => (
-            <Reveal key={project.id}>
-              <ProjectCard project={project} reversed={i % 2 === 1} />
-            </Reveal>
+        <header className="mt-8 flex flex-col gap-6 border-b border-border pb-7 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="font-pixel text-[11px] uppercase tracking-[0.22em] text-primary">
+              <span className="normal-eyebrow">Projects</span>
+              <span className="retro-eyebrow">LEVEL 02 · SELECT STAGE</span>
+            </p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+              Selected Projects
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+              A few websites and apps I’ve built. There’s more on GitHub.
+            </p>
+          </div>
+          <a
+            href={GITHUB_REPOSITORIES_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 border border-border bg-card px-4 text-sm font-medium transition-colors hover:border-primary/50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            View all repositories on GitHub
+            <ExternalLink className="h-4 w-4" aria-hidden />
+          </a>
+        </header>
+
+        <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
-
-        {wipProjects.length > 0 && (
-          <div className="mt-24">
-            <Reveal>
-              <p
-                className="font-pixel text-xs uppercase tracking-[0.25em] text-primary"
-                aria-label={retro ? "Level 02, select stage, work in progress" : "In the lab"}
-              >
-                <span className="normal-eyebrow">In the lab</span>
-                <span className="retro-eyebrow">LEVEL 02 · SELECT STAGE · WIP</span>
-              </p>
-              <h2 className="mt-3 text-2xl font-bold tracking-tight">Work in progress</h2>
-              <p className="mt-2 max-w-xl text-muted-foreground">
-                Things I'm actively building — rough around the edges, but real.
-              </p>
-            </Reveal>
-            <div className="mt-12 space-y-20">
-              {wipProjects.map((project, i) => (
-                <Reveal key={project.id}>
-                  <ProjectCard project={project} reversed={i % 2 === 1} />
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        )}
       </main>
       <SiteFooter />
     </div>

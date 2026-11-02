@@ -79,6 +79,18 @@ export function Hero() {
                 Contact Me
               </PixelButton>
             </Magnetic>
+            {profile.resumeHref ? (
+              <Magnetic>
+                <PixelButton
+                  href={profile.resumeHref}
+                  download
+                  variant="outline"
+                  aria-label="Download Résumé as a PDF"
+                >
+                  Download Résumé
+                </PixelButton>
+              </Magnetic>
+            ) : null}
           </div>
           <RetroModeControl />
         </div>
