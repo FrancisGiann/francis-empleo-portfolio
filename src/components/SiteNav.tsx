@@ -15,17 +15,17 @@ export function SiteNav() {
           to="/"
           hash="top"
           viewTransition={{ types: ["route"] }}
-          className="font-pixel text-sm tracking-widest text-foreground transition-colors hover:text-primary"
+          className="inline-flex min-h-11 items-center font-pixel text-xs tracking-widest text-foreground transition-colors hover:text-primary sm:text-sm"
         >
           FGE<span className="text-primary">_</span>
         </Link>
 
-        <div className="flex items-center gap-5 sm:gap-7">
+        <div className="flex items-center gap-3 sm:gap-7">
           <Link
             to="/"
             hash="projects"
             viewTransition={{ types: ["route"] }}
-            className="nav-link text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
+            className="nav-link inline-flex min-h-11 items-center whitespace-nowrap text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none sm:text-sm"
           >
             Projects
           </Link>
@@ -33,7 +33,7 @@ export function SiteNav() {
             href={profile.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="nav-link text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
+            className="nav-link inline-flex min-h-11 items-center whitespace-nowrap text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none sm:text-sm"
           >
             GitHub
           </a>
@@ -41,7 +41,7 @@ export function SiteNav() {
             to="/"
             hash="contact"
             viewTransition={{ types: ["route"] }}
-            className="nav-link text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
+            className="nav-link inline-flex min-h-11 items-center whitespace-nowrap text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none sm:text-sm"
           >
             Contact
           </Link>
@@ -58,7 +58,7 @@ export function SiteNav() {
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             aria-busy={isTransitioning}
             data-theme-toggle
-            className="pixel-step-sm flex h-9 w-9 items-center justify-center bg-muted text-foreground transition-colors hover:text-primary focus-visible:outline-none disabled:cursor-wait disabled:opacity-70"
+            className="pixel-step-sm flex h-11 w-11 shrink-0 items-center justify-center bg-muted text-foreground transition-colors hover:text-primary focus-visible:outline-none disabled:cursor-wait disabled:opacity-70"
           >
             {mounted && theme === "dark" ? (
               <Moon key="moon" className="theme-icon-in h-4 w-4" aria-hidden />

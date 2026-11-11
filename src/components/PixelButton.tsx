@@ -1,28 +1,46 @@
-import type { AnchorHTMLAttributes, ReactNode } from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 
-interface PixelButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+type PixelButtonBaseProps = {
   children: ReactNode;
   variant?: "primary" | "outline";
-  href: string;
-}
+  className?: string;
+};
 
-export function PixelButton({
-  children,
-  variant = "primary",
-  href,
-  className = "",
-  ...rest
-}: PixelButtonProps) {
+type AsAnchor = PixelButtonBaseProps & AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
+
+type AsButton = PixelButtonBaseProps & ButtonHTMLAttributes<HTMLButtonElement> & { href?: never };
+
+type PixelButtonProps = AsAnchor | AsButton;
+
+export function PixelButton(props: PixelButtonProps) {
+  const { children, variant = "primary", className = "", ...rest } = props;
+
   const base =
-    "pixel-step inline-flex items-center gap-2 px-5 py-2.5 font-pixel text-xs uppercase tracking-wider transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0";
+    "pixel-step inline-flex min-h-11 items-center gap-2 border px-5 py-2.5 font-pixel text-xs uppercase tracking-wider transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 motion-reduce:transform-none motion-reduce:transition-none";
   const styles =
     variant === "primary"
-      ? "bg-primary text-primary-foreground hover:brightness-110"
-      : "bg-transparent text-primary ring-2 ring-inset ring-primary hover:bg-primary hover:text-primary-foreground";
+      ? "border-transparent bg-primary text-primary-foreground hover:brightness-110"
+      : "pixel-button-outline border-transparent text-primary hover:text-primary-foreground";
 
+  const combined = `${base} ${styles} ${className}`;
+
+  if ("href" in props && props.href) {
+    const {
+      variant: _v,
+      href: _h,
+      ...anchorRest
+    } = rest as Omit<AsAnchor, "children" | "className">;
+    return (
+      <a className={combined} {...anchorRest} href={props.href}>
+        <span className="relative z-10">{children}</span>
+      </a>
+    );
+  }
+
+  const { variant: _v, ...buttonRest } = rest as Omit<AsButton, "children" | "className">;
   return (
-    <a href={href} className={`${base} ${styles} ${className}`} {...rest}>
-      {children}
-    </a>
+    <button className={combined} {...buttonRest}>
+      <span className="relative z-10">{children}</span>
+    </button>
   );
 }

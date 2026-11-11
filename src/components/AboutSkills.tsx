@@ -1,29 +1,19 @@
 import { Reveal } from "@/components/Reveal";
 import { TechTag } from "@/components/TechTag";
 import { profile, skillGroups } from "@/data/projects";
-import { useRetroMode } from "@/hooks/use-retro-mode";
 import { MiniGame } from "@/components/MiniGame";
+import { SECTION_SHELL_CLASS, SectionHeading } from "@/components/SectionHeading";
 
 export function AboutSkills() {
-  const { enabled: retro } = useRetroMode();
-
   return (
-    <section
-      id="about"
-      aria-labelledby="about-heading"
-      className="mx-auto max-w-5xl px-4 py-16 sm:px-6"
-    >
+    <section id="about" aria-labelledby="about-heading" className={SECTION_SHELL_CLASS}>
       <Reveal>
-        <p
-          className="font-pixel text-xs uppercase tracking-[0.25em] text-primary"
-          aria-label={retro ? "Level 01, about" : "About"}
-        >
-          <span className="normal-eyebrow">About</span>
-          <span className="retro-eyebrow">LEVEL 01 · ABOUT</span>
-        </p>
-        <h2 id="about-heading" className="mt-3 text-3xl font-bold tracking-tight">
-          A bit about me
-        </h2>
+        <SectionHeading
+          id="about-heading"
+          eyebrow="About"
+          retroEyebrow="LEVEL 01 · ABOUT"
+          title="A bit about me"
+        />
         <p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground">{profile.longBio}</p>
       </Reveal>
 
@@ -66,7 +56,7 @@ export function AboutSkills() {
           </div>
         </div>
       </Reveal>
-      
+
       <MiniGame />
     </section>
   );

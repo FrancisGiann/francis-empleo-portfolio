@@ -1,26 +1,20 @@
 import { Reveal } from "@/components/Reveal";
 import { nowItems } from "@/data/projects";
-import { useRetroMode } from "@/hooks/use-retro-mode";
+import { SECTION_SHELL_CLASS, SectionHeading } from "@/components/SectionHeading";
 
 /**
  * Compact "Now" section — what Francis is currently learning, building, reading.
  */
 export function NowSection() {
-  const { enabled: retro } = useRetroMode();
-
   return (
-    <section aria-labelledby="now-heading" className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+    <section aria-labelledby="now-heading" className={SECTION_SHELL_CLASS}>
       <Reveal>
-        <p
-          className="font-pixel text-xs uppercase tracking-[0.25em] text-primary"
-          aria-label={retro ? "Level 03, now" : "Now"}
-        >
-          <span className="normal-eyebrow">Now</span>
-          <span className="retro-eyebrow">LEVEL 03 · NOW</span>
-        </p>
-        <h2 id="now-heading" className="mt-3 text-3xl font-bold tracking-tight">
-          What I'm up to
-        </h2>
+        <SectionHeading
+          id="now-heading"
+          eyebrow="Now"
+          retroEyebrow="LEVEL 03 · NOW"
+          title="What I'm up to"
+        />
       </Reveal>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-3">

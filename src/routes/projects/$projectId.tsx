@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNav } from "@/components/SiteNav";
 import { TechTag } from "@/components/TechTag";
 import { getProject, profile, projects } from "@/data/projects";
+import { SECTION_SHELL_CLASS } from "@/components/SectionHeading";
 
 export const Route = createFileRoute("/projects/$projectId")({
   loader: ({ params }) => {
@@ -43,7 +44,7 @@ function ProjectDetailPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteNav />
-      <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+      <main className={SECTION_SHELL_CLASS}>
         <Reveal>
           <Link
             to="/projects"

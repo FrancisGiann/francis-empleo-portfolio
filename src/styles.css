@@ -229,13 +229,60 @@
   );
 }
 
-/* clip-path clips outlines, so focus rings on stepped elements go inset */
+/* Keep a clear focus indicator outside the stepped edge. */
 .pixel-step:focus-visible,
 .pixel-step-sm:focus-visible {
-  outline: none;
-  box-shadow:
-    inset 0 0 0 2px var(--primary),
-    inset 0 0 0 4px var(--background);
+  clip-path: none;
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+/* Outline buttons use a filled stepped silhouette with a clipped inset to make
+   a continuous border instead of a rectangular border cut by clip-path. */
+.pixel-button-outline {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--primary);
+}
+
+.pixel-button-outline::before {
+  position: absolute;
+  z-index: 0;
+  inset: 1px;
+  background-color: var(--background);
+  clip-path: polygon(
+    0 8px,
+    4px 8px,
+    4px 4px,
+    8px 4px,
+    8px 0,
+    calc(100% - 8px) 0,
+    calc(100% - 8px) 4px,
+    calc(100% - 4px) 4px,
+    calc(100% - 4px) 8px,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 4px) calc(100% - 8px),
+    calc(100% - 4px) calc(100% - 4px),
+    calc(100% - 8px) calc(100% - 4px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    8px calc(100% - 4px),
+    4px calc(100% - 4px),
+    4px calc(100% - 8px),
+    0 calc(100% - 8px)
+  );
+  content: "";
+}
+
+.pixel-button-outline:hover::before {
+  background-color: transparent;
+}
+
+.pixel-button-outline:focus-visible::before,
+html.retro .pixel-button-outline::before {
+  clip-path: none;
 }
 
 /* ---- Dotted section divider ---- */

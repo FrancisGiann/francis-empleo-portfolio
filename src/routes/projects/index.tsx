@@ -43,6 +43,7 @@ function ProjectsPage() {
           <span className="retro-cta-label">Back to map</span>
         </Link>
 
+
         <header className="mt-8 flex flex-col gap-6 border-b border-border pb-7 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="font-pixel text-[11px] uppercase tracking-[0.22em] text-primary">

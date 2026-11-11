@@ -62,7 +62,7 @@ export const projects: Project[] = [
     category: "Resort website",
     headline: "Explore the resort before you book.",
     description:
-      "A resort website with a 360° virtual tour and online booking for M.I. Sevilla Resort.",
+      "I helped M.I. Sevilla Resort improve its website accessibility and built a resort site with a CMS for managing booking requests. Guests can browse accommodations and event spaces, explore a 360° tour, and submit booking and payment details for staff review.",
     tech: ["PHP", "MariaDB", "JavaScript", "Panolens.js"],
     status: "live",
     statusLabel: "Completed · Live",
@@ -107,7 +107,8 @@ export const projects: Project[] = [
     title: "HealthMate",
     category: "Clinic management",
     headline: "Clinic visits and records, in one place.",
-    description: "A role-based clinic system for student visits, health records, and appointments.",
+    description:
+      "I built a role-based clinic system for student visits, health records, and appointments. Guardians can submit health-record requests for nurse review, while clinic staff manage visits and appointment availability through access-controlled workflows.",
     tech: ["React", "Vite", "Express", "PostgreSQL"],
     status: "live",
     statusLabel: "Live website",
@@ -153,7 +154,7 @@ export const projects: Project[] = [
     category: "School information system",
     headline: "School workflows for enrollment, grades, and finance.",
     description:
-      "A school information system covering enrollment, grades, finance, and student records. AI-assisted name and field checks require staff review.",
+      "I built a school information system that brings enrollment, student records, grades, and finance workflows into one staff-facing app. It supports review queues for enrollment and finance decisions, grade imports for registrar approval, and AI-assisted document checks that leave final review to staff.",
     tech: ["Node.js", "Express", "EJS", "MariaDB", "Gemini"],
     status: "live",
     statusLabel: "Live website",
@@ -195,7 +196,7 @@ export const projects: Project[] = [
     category: "Android app",
     headline: "See your balances. Log an expense fast.",
     description:
-      "An offline Android budget tracker for manually recorded wallets, spending, income, and transfers.",
+      "I built an offline Android budget tracker for manually entered wallets, income, spending, and transfers. It includes monthly budgets, scheduled allowances, and quick-entry widgets, with no bank or e-wallet accounts connected.",
     tech: ["Flutter", "Dart", "Kotlin"],
     status: "live",
     statusLabel: "Android app",
@@ -251,7 +252,7 @@ export const projects: Project[] = [
     category: "Android app",
     headline: "Know what to bring before you go.",
     description:
-      "An offline checklist for reusable packing lists, scheduled outings, reminders, and home-screen widgets.",
+      "I built an offline Android packing app for reusing checklists across planned outings and scheduling reminders. Home-screen widgets show list progress and let people check items without opening the app.",
     tech: ["Flutter", "Dart", "Kotlin"],
     status: "live",
     statusLabel: "Android app",
@@ -297,7 +298,7 @@ export const projects: Project[] = [
     category: "Android reader",
     headline: "Keep your reading library in one place.",
     description:
-      "An Android reader for manga, webtoons, online novels, and local EPUB, PDF, and text files.",
+      "I’m building an Android library and reader for online manga, webtoons, and novels alongside local EPUB, PDF, and text files. The app includes chapter lists and reading screens for local books, manga pages, and vertical webtoons.",
     tech: ["Kotlin", "Jetpack Compose", "Android"],
     status: "wip",
     statusLabel: "Android prerelease",
@@ -352,7 +353,7 @@ export const projects: Project[] = [
     category: "Thesis rehearsal workspace",
     headline: "Practice your defense with your paper in view.",
     description:
-      "A local workspace for reviewing a thesis PDF, practising typed answers, and checking citations against source pages.",
+      "I built a local thesis-rehearsal workspace where students can read a PDF, type practice answers, and revisit feedback beside source pages. Citation checks link back to the selected document, and rehearsal data stays in the local workspace.",
     tech: ["React", "TypeScript", "Node.js", "SQLite"],
     status: "live",
     statusLabel: "Local app",
@@ -397,7 +398,7 @@ export const projects: Project[] = [
     category: "Paper trading lab",
     headline: "Explore crypto strategies without real trades.",
     description:
-      "A paper-trading workspace for testing crypto strategy ideas with local history. Paper trades only; no real-money execution.",
+      "I worked with Codex to shape and refine a local research dashboard that compares paper-trading rules against previously inspected BTC and ETH history. I also developed a separate timed forward-paper workflow; RKO never places exchange orders or executes real-money trades.",
     tech: ["Python", "SQLite", "HTML", "CSS", "JavaScript"],
     status: "wip",
     statusLabel: "WIP · Paper trading",
@@ -406,28 +407,28 @@ export const projects: Project[] = [
     images: [],
     screenshots: [
       {
-        src: "/references/gallery/rko-overview.webp",
-        alt: "RKO v5.1 results comparison with no saved result.",
-        caption: "v5.1 results comparison; no saved result is present.",
+        src: "/references/gallery/rko-v5_1-overview.png",
+        alt: "RKO v5.1 historical strategy comparison with a notice that no candidate was selected.",
+        caption: "Compare fixed strategy rules on previously inspected history; no candidate was selected.",
       },
       {
-        src: "/references/gallery/rko-demo.webp",
-        alt: "RKO synthetic strategy replay using fixed January 2025 data.",
-        caption: "Synthetic January 2025 replay; no exchange orders are placed.",
+        src: "/references/gallery/rko-v5_1-forward-review.png",
+        alt: "RKO timed paper-session review showing a one-minute duration and zero trades expected.",
+        caption: "Review a timed paper session before starting; the one-minute QA run ended with no fills or positions.",
       },
     ],
     coverageNote:
-      "v5.1 public preview with a synthetic replay; the cover is from the separate v5.3 no-session screen.",
+      "V5.1 captures: historical results reuse already-inspected market data and no strategy was selected. The one-minute timed-session QA ended with no fills or positions.",
     contribution: "Requirements, UX iteration, and AI-assisted paper-trading prototypes.",
     features: [
       "Explore strategy ideas with paper trades only.",
       "Review local history without connecting to a live exchange.",
       "No real-money execution is available.",
     ],
-    showcaseImage: "/showcases/rko.webp",
-    showcaseScreen: "/references/rko-screen.webp",
-    imageAlt: "RKO paper-trading overview with no session or trade records.",
-    mediaNote: "Offline diagnostic capture from v5.3; no session was started.",
+    showcaseScreen: "/references/gallery/rko-v5_1-overview.png",
+    imageAlt: "RKO v5.1 historical strategy comparison using previously inspected data.",
+    mediaNote:
+      "V5.1 historical results reuse already-inspected market data; no candidate was selected. The timed paper-session screenshot shows a one-minute QA flow that ended with no fills or positions. No exchange orders are placed.",
     external: {
       repo: "https://github.com/FrancisGiann/rko",
     },
@@ -438,7 +439,7 @@ export const projects: Project[] = [
     category: "Typing practice",
     headline: "Build speed with calm, focused practice.",
     description:
-      "A typing workspace with Ghost Racer pacing, progress insights, weakness analysis, and targeted drills with offline fallbacks.",
+      "I built a typing-practice workspace with timed lessons, Ghost Racer pacing, and progress insights. It identifies typing weaknesses and offers focused drills, with offline fallback text when network content is unavailable.",
     tech: ["React", "JavaScript", "Express", "SQLite", "Supabase", "OpenRouter"],
     status: "live",
     statusLabel: "Completed",

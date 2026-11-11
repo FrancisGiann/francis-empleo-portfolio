@@ -7,10 +7,10 @@ export function SiteFooter() {
   const { enabled: retro } = useRetroMode();
 
   return (
-    <footer id="contact" className="border-t border-border">
+    <footer className="border-t border-border">
       <div
         aria-hidden={retro}
-        className="normal-footer mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6"
+        className="normal-footer mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6"
       >
         <p className="text-sm text-muted-foreground">© 2026 {profile.name}</p>
         <div className="flex items-center gap-6">

@@ -15,6 +15,7 @@ Live portfolio: [francisgiann.vercel.app](https://francisgiann.vercel.app)
 - A short first-visit boot status (`FGE_OS v1.0`) that skips on repeat visits and reduced-motion preferences.
 - Retro-only stage labels, skill inventory, player-status footer, and a code-native pixel avatar.
 - Live GitHub contribution calendar.
+- A site-wide AI portfolio chat, with a clearly labeled portfolio-only fallback when no server key is configured.
 - Reduced-motion and keyboard accessibility support.
 - SSR and production output through TanStack Start and Nitro.
 
@@ -42,6 +43,14 @@ bun run dev
 
 Open the URL printed by Vite in your browser.
 
+### Portfolio chat setup
+
+The chat uses Google's Gemini API. Create a key in [Google AI Studio](https://aistudio.google.com/api-keys) using a free-tier project with billing disabled, then copy `.env.example` to `.env.local` and set `GEMINI_API_KEY`. The default model is `gemini-3.1-flash-lite`, which Google lists as free of charge on its Free Tier in the [Gemini pricing page](https://ai.google.dev/gemini-api/docs/pricing#gemini-3.1-flash-lite). `GEMINI_MODEL` is optional; check current pricing for your project before changing it. This app does not enable billing or switch to a paid model automatically, but an API key or model configured for a paid tier could incur charges.
+
+Keep the key server-side: never use a `VITE_` prefix or add it to client code. The chat sends submitted conversation messages to Google to generate replies when the key is configured. Google may use free-tier prompts and responses to improve its products; review Google's current API terms before enabling live chat. Messages are not sent to Francis. Without a key, the chat gives a clearly labeled portfolio-based answer; if Gemini is unavailable, it shows a portfolio-only reply and retry option.
+
+For deployment, configure `GEMINI_API_KEY` and optionally `GEMINI_MODEL` in the server runtime's environment settings, using a free-tier project with billing disabled if you want to stay within the no-cost tier. Request limits are bounded in each server process and are not shared across multiple instances.
+
 ## Scripts
 
 | Script      | Command                         |
@@ -63,11 +72,13 @@ src/
 ├── hooks/            # Theme, retro-mode, typewriter, and responsive behavior
 ├── routes/
 │   ├── __root.tsx    # Root shell and shared providers
+│   ├── api/chat.ts   # Server-side chat endpoint
 │   ├── index.tsx     # Home route
 │   ├── projects.tsx  # Selected projects route
 │   └── projects/
 │       └── $projectId.tsx # Dynamic project detail route
 ├── styles.css        # Theme tokens, typography, pixel styling, and motion
+├── server/            # Server-only portfolio chat and provider integration
 └── server.ts         # TanStack Start server entry
 public/               # Static assets such as the favicon and robots.txt
 ```

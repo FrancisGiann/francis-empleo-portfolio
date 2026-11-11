@@ -15,6 +15,7 @@ import appCss from "../styles.css?url";
 import { ThemeProvider, useTheme } from "../hooks/use-theme";
 import { RetroModeProvider } from "../hooks/use-konami";
 import { ScrollProgress } from "../components/ScrollProgress";
+import { PortfolioChat } from "../components/PortfolioChat";
 
 const BOOT_VERSION = "fge-boot-v2";
 const BOOT_STORAGE_KEY = `portfolio-boot:${BOOT_VERSION}`;
@@ -151,6 +152,7 @@ function RootComponent() {
           <BootSequence />
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
+          <PortfolioChat />
         </RetroModeProvider>
       </ThemeProvider>
     </QueryClientProvider>
