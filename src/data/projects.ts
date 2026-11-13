@@ -488,9 +488,9 @@ export const profile = {
   name: "Francis Giann Empleo",
   role: "Full-Stack Developer",
   shortBio:
-    "I’m an IT student in Lucena. I build websites and Android apps for bookings, school workflows, and everyday use.",
+    "I’m an IT student who designs and builds websites and Android apps.",
   longBio:
-    "I build software across React, Flutter, and backend systems, from data and APIs to the interfaces people use. My projects include offline apps, clinic and school software, and developer tools.",
+    "My work includes resort booking websites, clinic appointment systems, and Android apps for budgeting and planning.",
   email: "empleo.francisgiann@gmail.com",
   resumeHref: "/Francis-Giann-Empleo-Resume.pdf",
   github: "https://github.com/FrancisGiann",

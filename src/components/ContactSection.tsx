@@ -7,17 +7,21 @@ import { profile } from "@/data/projects";
 const MAX_NAME_LENGTH = 80;
 const MAX_EMAIL_LENGTH = 254;
 const MAX_MESSAGE_LENGTH = 2000;
+const INVALID_EMAIL_MESSAGE =
+  "Enter a valid email address with a full domain, such as you@example.com. Nothing has been sent.";
 
 const inputClass =
   "min-h-11 w-full border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 export function ContactSection() {
   const [emailDraftUrl, setEmailDraftUrl] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState("");
   const [error, setError] = useState("");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    setEmailError("");
 
     const form = event.currentTarget;
     const data = new FormData(form);
@@ -26,6 +30,11 @@ export function ContactSection() {
     const message = String(data.get("message") ?? "").trim();
     const emailInput = form.elements.namedItem("email");
 
+    if (emailInput instanceof HTMLInputElement && !emailInput.validity.valid) {
+      setEmailError(INVALID_EMAIL_MESSAGE);
+      emailInput.focus();
+      return;
+    }
     if (!name || !email || !message) {
       setError("Please fill in your name, email, and message.");
       return;
@@ -36,11 +45,6 @@ export function ContactSection() {
       message.length > MAX_MESSAGE_LENGTH
     ) {
       setError("Please shorten one or more fields and try again.");
-      return;
-    }
-    if (emailInput instanceof HTMLInputElement && !emailInput.validity.valid) {
-      setError("Please enter a valid email address.");
-      emailInput.focus();
       return;
     }
 
@@ -117,11 +121,33 @@ export function ContactSection() {
                 id="contact-email"
                 name="email"
                 required
+                pattern=".+@.+[.].{2,63}"
                 maxLength={MAX_EMAIL_LENGTH}
                 autoComplete="email"
                 className={inputClass}
                 placeholder="you@example.com"
+                aria-invalid={Boolean(emailError)}
+                aria-describedby={
+                  emailError
+                    ? "contact-email-guidance contact-email-error"
+                    : "contact-email-guidance"
+                }
+                onInvalid={(event) => {
+                  event.preventDefault();
+                  setEmailError(INVALID_EMAIL_MESSAGE);
+                  event.currentTarget.focus();
+                }}
+                onChange={() => setEmailError("")}
               />
+              <p id="contact-email-guidance" className="mt-1 text-xs text-muted-foreground">
+                Use a full address, such as you@example.com. This form prepares a draft; nothing
+                is sent automatically.
+              </p>
+              {emailError && (
+                <p id="contact-email-error" role="alert" className="mt-1 text-sm text-destructive">
+                  {emailError}
+                </p>
+              )}
             </div>
             <div>
               <label htmlFor="contact-message" className="mb-1 block text-sm font-medium">
