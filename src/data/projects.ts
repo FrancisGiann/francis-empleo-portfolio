@@ -5,6 +5,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  cardSummary: string;
   tech: string[];
   status: "live" | "wip";
   statusLabel?: string;
@@ -63,6 +64,8 @@ export const projects: Project[] = [
     headline: "Explore the resort before you book.",
     description:
       "Sevilla360 is a resort website for M.I. Sevilla Resort that helps guests review accommodations, event venues, availability, and the property through an interactive 360° showroom before submitting a reservation. Its booking flow captures venue and date selections, guest details, and payment information for staff review, while separate guest and admin areas support account access and booking management. A content management system lets resort staff update site information, and the public experience includes accessibility improvements.",
+    cardSummary:
+      "A resort website for browsing accommodations, exploring a 360° tour, and submitting booking requests.",
     tech: ["PHP", "MariaDB", "JavaScript", "Panolens.js"],
     status: "live",
     statusLabel: "Completed · Live",
@@ -87,7 +90,7 @@ export const projects: Project[] = [
       },
     ],
     coverageNote: "Booking and venue screens; the 360° tour is not pictured.",
-    contribution: "360° showroom, booking, and staff-reviewed payment workflows.",
+    contribution: "Booking management CMS and public website accessibility improvements.",
     features: [
       "Explore resort spaces through an interactive 360° panorama.",
       "Submit booking requests and payment proof for staff review.",
@@ -109,6 +112,8 @@ export const projects: Project[] = [
     headline: "Clinic visits and records, in one place.",
     description:
       "HealthMate+ is a campus clinic management system for student health visits and records, serving guardians, nurses, and administrators. Guardian accounts can request links to student records, submit health information or appointment requests, and follow review status; nurses validate submissions, record visits, manage scheduling, and review incident reports. Administrative tools cover user access, clinic inventory, reports, and audit history, keeping record changes within role-controlled workflows.",
+    cardSummary:
+      "A campus clinic system for student visits, guardian health-record requests, and appointment scheduling.",
     tech: ["React", "Vite", "Express", "PostgreSQL"],
     status: "live",
     statusLabel: "Live website",
@@ -155,6 +160,8 @@ export const projects: Project[] = [
     headline: "School workflows for enrollment, grades, and finance.",
     description:
       "ARKTIESIIS centralizes learner profiles, enrollment history, academic records, school documents, and finance records for school staff, with a student portal for personal read-only records. Front-desk staff capture paper pre-enrollment details, registrars review documents and placements and approve teacher-submitted grade records, while Finance manages assessments and payments before enrollment is finalized. Report-card uploads can receive a limited name and file-format precheck, but staff retain the final document and record decisions.",
+    cardSummary:
+      "A school records system connecting enrollment, student records, grades, document review, and finance workflows.",
     tech: ["Node.js", "Express", "EJS", "MariaDB", "Gemini"],
     status: "live",
     statusLabel: "Live website",
@@ -197,6 +204,8 @@ export const projects: Project[] = [
     headline: "See your balances. Log an expense fast.",
     description:
       "PonPon is an offline Android ledger for people who want to track cash and e-wallet balances without linking bank accounts or moving money. It stores manually entered income, expenses, and wallet-to-wallet transfers, with active-wallet totals, transaction history, category breakdowns, and monthly spending budgets. Users can also configure scheduled allowance entries and add records from home-screen or quick-entry widgets; all figures come from the local ledger rather than linked account balances.",
+    cardSummary:
+      "An offline Android ledger for tracking manual wallet balances, income, expenses, transfers, and monthly budgets.",
     tech: ["Flutter", "Dart", "Kotlin"],
     status: "live",
     statusLabel: "Android app",
@@ -253,6 +262,8 @@ export const projects: Project[] = [
     headline: "Know what to bring before you go.",
     description:
       "Ready Yet? is an offline Android checklist for preparing recurring outings such as school, work, gym, and trips. Reusable packing lists feed separate checklists for each outing, so edits to a template do not overwrite a plan already underway; weekday schedules can create daily lists and send optional departure reminders. Home-screen widgets show today’s list progress and let people check items or open the list directly, while unfinished and dismissed outings remain available to resume or restore.",
+    cardSummary:
+      "An offline Android checklist app for reusable packing lists, scheduled outings, reminders, and home-screen widgets.",
     tech: ["Flutter", "Dart", "Kotlin"],
     status: "live",
     statusLabel: "Android app",
@@ -299,6 +310,8 @@ export const projects: Project[] = [
     headline: "Keep your reading library in one place.",
     description:
       "Arkhive is an Android reading library for manga, webtoons, and novels from supported online sources, alongside books imported as EPUB, PDF, or text files. A unified library organizes titles and chapters, while format-specific readers track progress and bookmarks; manga readers support page or vertical reading, and saved chapters can be queued for offline access. The project also includes source browsing and a separate catalog and discovery area for identifying books and editions.",
+    cardSummary:
+      "An Android reading library for supported online manga, webtoons, novels, and imported EPUB, PDF, and text books.",
     tech: ["Kotlin", "Jetpack Compose", "Android"],
     status: "wip",
     statusLabel: "Android prerelease",
@@ -354,6 +367,8 @@ export const projects: Project[] = [
     headline: "Practice your defense with your paper in view.",
     description:
       "Defense Studio, now branded PanelReady, is a local thesis-defense rehearsal workspace for students preparing to present a research paper. It lets students read an uploaded PDF, practise typed answers in guided or timed mock-defense sessions, and revisit answers, feedback, and focus areas beside the cited source pages. Citation controls point to retained excerpts in the selected document; optional AI coaching requires session consent, and papers and rehearsal records stay in the local workspace.",
+    cardSummary:
+      "A local thesis-rehearsal workspace for reading papers, practising answers, and reviewing source-linked feedback.",
     tech: ["React", "TypeScript", "Node.js", "SQLite"],
     status: "live",
     statusLabel: "Local app",
@@ -399,6 +414,8 @@ export const projects: Project[] = [
     headline: "Explore crypto strategies without real trades.",
     description:
       "RKO is a local research dashboard for examining cryptocurrency strategy rules in paper-only workflows. Its historical view summarizes results from previously inspected Binance BTC and ETH price history, including return, drawdown, exposure, and trade counts; those retrospective experiments have not produced a selected strategy. A separate timed forward-paper cohort simulates USD positions against fresh public quotes under a server-enforced duration limit, distinct from the historical analysis; the app has no exchange-order path and does not execute real-money trades.",
+    cardSummary:
+      "A local paper-trading research tool with retrospective crypto analysis and a separate timed forward-paper cohort.",
     tech: ["Python", "SQLite", "HTML", "CSS", "JavaScript"],
     status: "wip",
     statusLabel: "WIP · Paper trading",
@@ -440,6 +457,8 @@ export const projects: Project[] = [
     headline: "Build speed with calm, focused practice.",
     description:
       "Flow is a typing-practice workspace for people building speed and accuracy through short, repeatable sessions. Timed passage lessons report words per minute and accuracy, while optional Ghost Racer pacing provides a moving target during practice. Session history and a progress dashboard surface recurring key and character-pattern errors, then assemble focused drills from saved content or offline fallback passages when network or AI services are unavailable.",
+    cardSummary:
+      "A typing-practice workspace with timed lessons, speed and accuracy tracking, progress insights, and focused drills.",
     tech: ["React", "JavaScript", "Express", "SQLite", "Supabase", "OpenRouter"],
     status: "live",
     statusLabel: "Completed",

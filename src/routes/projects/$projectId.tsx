@@ -57,31 +57,31 @@ function ProjectDetailPage() {
           </Link>
         </Reveal>
 
-        <article className="mt-8">
+        <article className="mt-6">
           <Reveal>
-            <div className="grid gap-6 border-b border-border pb-7 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-              <div>
-                <p className="font-pixel text-[11px] uppercase tracking-[0.22em] text-primary">
-                  <span className="normal-eyebrow">{project.category ?? "Project"}</span>
-                  <span className="retro-eyebrow">
-                    SELECTED STAGE // {String(projectIndex + 1).padStart(2, "0")}
-                  </span>
-                </p>
-                <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+            <div className="border-b border-border pb-5">
+              <p className="font-pixel text-[11px] uppercase tracking-[0.22em] text-primary">
+                <span className="normal-eyebrow">{project.category ?? "Project"}</span>
+                <span className="retro-eyebrow">
+                  SELECTED STAGE // {String(projectIndex + 1).padStart(2, "0")}
+                </span>
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+                <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
                   {project.title}
                 </h1>
-                <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  {project.description}
+                <p className="w-fit border border-border bg-muted/50 px-3 py-1.5 text-sm font-medium text-muted-foreground">
+                  {statusLabel}
                 </p>
               </div>
-              <p className="w-fit border border-border bg-muted/50 px-3 py-2 text-sm font-medium text-muted-foreground">
-                {statusLabel}
+              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+                {project.cardSummary}
               </p>
             </div>
           </Reveal>
 
           <Reveal delay={80}>
-            <div className="mt-8">
+            <div className="mt-6">
               <ProjectShowcase project={project} />
               {project.mediaNote ? (
                 <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
@@ -92,6 +92,20 @@ function ProjectDetailPage() {
           </Reveal>
 
           <Reveal delay={120}>
+            <section
+              aria-labelledby="project-overview-heading"
+              className="mt-6 border-b border-border pb-5"
+            >
+              <h2 id="project-overview-heading" className="text-lg font-semibold tracking-tight">
+                Overview
+              </h2>
+              <p className="mt-2 max-w-3xl leading-relaxed text-muted-foreground">
+                {project.description}
+              </p>
+            </section>
+          </Reveal>
+
+          <Reveal delay={160}>
             <section
               aria-labelledby="project-work-heading"
               className="mt-8 grid gap-8 border-y border-border py-7 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]"

@@ -1,4 +1,4 @@
-import { ArrowUpRight, ExternalLink, Images } from "lucide-react";
+import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { TechTag } from "@/components/TechTag";
 import { ProjectShowcase } from "@/components/ProjectShowcase";
@@ -48,7 +48,7 @@ export function ProjectCard({ project }: { project: Project }) {
           </Link>
         </h3>
         <p className="mt-2 max-w-prose text-sm leading-relaxed text-muted-foreground">
-          {project.description}
+          {project.cardSummary}
         </p>
         <p className="mt-3 border-l-2 border-primary/50 pl-3 text-sm leading-relaxed text-foreground/85">
           <span className="font-semibold">My work:</span> {project.contribution}
@@ -61,27 +61,6 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
 
         <div className="mt-auto flex flex-wrap items-center gap-1 pt-5">
-          <Link
-            to="/projects/$projectId"
-            params={{ projectId: project.id }}
-            hash="gallery"
-            viewTransition={{ types: ["route"] }}
-            aria-label={
-              project.screenshots.length > 0
-                ? `View ${project.screenshots.length} screenshots for ${project.title}`
-                : `View gallery note for ${project.title}`
-            }
-            className={`${actionClass} pl-0 text-primary hover:text-foreground`}
-          >
-            <Images className="h-4 w-4" aria-hidden />
-            <span>
-              {project.screenshots.length === 0
-                ? "Gallery note"
-                : project.screenshots.length === 1
-                  ? "View 1 screenshot"
-                  : `View ${project.screenshots.length} screenshots`}
-            </span>
-          </Link>
           <Link
             to="/projects/$projectId"
             params={{ projectId: project.id }}
