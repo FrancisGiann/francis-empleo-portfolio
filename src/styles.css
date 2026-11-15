@@ -1925,17 +1925,31 @@ html.arcade-mode .arcade-mode-copy {
 }
 
 .hero-art-canopy {
-  --sprite-x: 82.2%; --sprite-y: 18.2%; --sprite-width: 17.8%; --sprite-height: 31.8%;
-  --sprite-origin: 76% 91%;
-  --sprite-animation: hero-canopy-sway 7.2s ease-in-out -1.2s infinite alternate;
-  --sprite-mask: polygon(
-    53% 13%, 57% 8%, 62% 8%, 66% 4%, 71% 7%, 75% 11%, 80% 13%, 85% 17%, 90% 18%, 95% 24%, 100% 29%,
-    100% 38%, 98% 43%, 100% 50%, 97% 56%, 93% 58%, 90% 63%, 86% 64%, 83% 69%, 79% 71%, 75% 75%,
-    80% 79%, 78% 84%, 76% 90%, 79% 94%, 78% 98%, 75% 95%, 72% 91%, 70% 86%, 67% 82%, 64% 79%,
-    60% 77%, 57% 74%, 54% 71%, 50% 68%, 46% 69%, 42% 67%, 38% 64%, 34% 65%, 30% 62%, 27% 59%,
-    22% 58%, 19% 54%, 15% 53%, 12% 49%, 9% 45%, 5% 43%, 2% 40%, 0 39%, 2% 34%, 7% 33%, 11% 31%,
-    14% 27%, 18% 26%, 22% 23%, 27% 24%, 31% 20%, 36% 19%, 41% 20%, 45% 16%, 49% 13%
-  );
+  --sprite-x: 80%; --sprite-y: 17%; --sprite-width: 20%; --sprite-height: 34%;
+  --sprite-mask: none;
+  --sprite-animation: none;
+  clip-path: none;
+  animation: none;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 8%, #000 100%),
+    linear-gradient(180deg, transparent 0%, #000 7%, #000 95%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.hero-art-canopy::after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: max(100cqw, 150cqh);
+  height: max(66.6667cqw, 100cqh);
+  background: url("/pixel-art/portfolio-dusk.webp") no-repeat center / 100% 100%;
+  -webkit-mask-image: radial-gradient(ellipse 10% 12% at 92% 31%, #000 48%, transparent 100%);
+  mask-image: radial-gradient(ellipse 10% 12% at 92% 31%, #000 48%, transparent 100%);
+  content: "";
+  opacity: 0.28;
+  pointer-events: none;
+  transform-origin: 95.7% 47.1%;
+  animation: hero-canopy-interior 7.2s ease-in-out -1.2s infinite alternate;
 }
 
 .portfolio-hero-lanterns {
@@ -1967,9 +1981,9 @@ html.arcade-mode .arcade-mode-copy {
   to { transform: translate3d(var(--sprite-drift-x), var(--sprite-drift-y), 0); }
 }
 
-@keyframes hero-canopy-sway {
-  from { transform: rotate(-2.5deg); }
-  to { transform: rotate(3deg); }
+@keyframes hero-canopy-interior {
+  from { transform: translate(calc(0% - var(--sprite-x)), calc(0% - var(--sprite-y))) skewX(-0.35deg); }
+  to { transform: translate(calc(0% - var(--sprite-x)), calc(0% - var(--sprite-y))) skewX(0.35deg); }
 }
 
 @keyframes hero-lantern-glow {
@@ -1986,6 +2000,7 @@ html.arcade-mode .arcade-mode-copy {
 .portfolio-hero[data-scene-visible="false"]::after,
 .portfolio-hero[data-scene-visible="false"] .portfolio-hero-art-pan,
 .portfolio-hero[data-scene-visible="false"] .portfolio-hero-art-sprite,
+.portfolio-hero[data-scene-visible="false"] .hero-art-canopy::after,
 .portfolio-hero[data-scene-visible="false"] .portfolio-hero-lantern {
   animation-play-state: paused;
 }
