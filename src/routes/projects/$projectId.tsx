@@ -42,7 +42,7 @@ function ProjectDetailPage() {
     project.statusLabel ?? (project.status === "wip" ? "In progress" : "Completed");
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="portfolio-shell min-h-screen bg-background text-foreground">
       <SiteNav />
       <main className={SECTION_SHELL_CLASS}>
         <Reveal>
@@ -52,17 +52,17 @@ function ProjectDetailPage() {
             className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
-            <span className="normal-cta-label">Back to projects</span>
-            <span className="retro-cta-label">Back to stage select</span>
+            <span className="normal-mode-copy">Back to projects</span>
+            <span className="arcade-mode-copy">Back to stage select</span>
           </Link>
         </Reveal>
 
-        <article className="mt-6">
+        <article className="portfolio-detail mt-6">
           <Reveal>
             <div className="border-b border-border pb-5">
               <p className="font-pixel text-[11px] uppercase tracking-[0.22em] text-primary">
-                <span className="normal-eyebrow">{project.category ?? "Project"}</span>
-                <span className="retro-eyebrow">
+                <span className="normal-mode-copy">{project.category ?? "Project"}</span>
+                <span className="arcade-mode-copy">
                   SELECTED STAGE // {String(projectIndex + 1).padStart(2, "0")}
                 </span>
               </p>

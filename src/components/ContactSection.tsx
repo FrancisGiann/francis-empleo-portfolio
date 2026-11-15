@@ -56,10 +56,20 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className={SECTION_SHELL_CLASS}>
+    <section
+      id="contact"
+      aria-labelledby="contact-heading"
+      className={`portfolio-module portfolio-contact ${SECTION_SHELL_CLASS}`}
+    >
       <Reveal>
         <div className="max-w-2xl">
-          <SectionHeading id="contact-heading" eyebrow="Contact" title="Let's talk" />
+          <SectionHeading
+            id="contact-heading"
+            eyebrow="Contact"
+            arcadeEyebrow="LEVEL 05 · CONTACT"
+            title="Let's talk"
+            arcadeTitle="Player 2, join"
+          />
           <p className="mt-5 leading-relaxed text-muted-foreground">
             I'm currently open to new opportunities. Whether you have a question or just want to say
             hi, I'll try my best to get back to you. You can also reach me at{" "}
@@ -76,7 +86,7 @@ export function ContactSection() {
             <div
               role="status"
               aria-live="polite"
-              className="mt-8 pixel-step-sm border border-primary/50 bg-primary/5 p-5"
+              className="portfolio-contact-draft mt-8 pixel-step-sm border border-primary/50 bg-primary/5 p-5"
             >
               <p className="font-semibold">Your email draft is ready.</p>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -95,7 +105,7 @@ export function ContactSection() {
           <form
             onSubmit={handleSubmit}
             hidden={Boolean(emailDraftUrl)}
-            className="mt-8 space-y-4 pixel-step border border-border bg-card p-5 shadow-sm sm:p-8"
+            className="portfolio-contact-form mt-8 space-y-4 pixel-step border border-border bg-card p-5 shadow-sm sm:p-8"
           >
             <div>
               <label htmlFor="contact-name" className="mb-1 block text-sm font-medium">
@@ -140,8 +150,8 @@ export function ContactSection() {
                 onChange={() => setEmailError("")}
               />
               <p id="contact-email-guidance" className="mt-1 text-xs text-muted-foreground">
-                Use a full address, such as you@example.com. This form prepares a draft; nothing
-                is sent automatically.
+                Use a full address, such as you@example.com. This form prepares a draft; nothing is
+                sent automatically.
               </p>
               {emailError && (
                 <p id="contact-email-error" role="alert" className="mt-1 text-sm text-destructive">
@@ -174,12 +184,14 @@ export function ContactSection() {
             )}
 
             <div className="pt-2">
-              <PixelButton type="submit">Prepare email</PixelButton>
+              <PixelButton type="submit" className="contact-submit">
+                <span className="normal-mode-copy">Prepare email draft</span>
+                <span className="arcade-mode-copy">▶ Press Start · prepare email draft</span>
+              </PixelButton>
             </div>
           </form>
         </div>
       </Reveal>
-
     </section>
   );
 }

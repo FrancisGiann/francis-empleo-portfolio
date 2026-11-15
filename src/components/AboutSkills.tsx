@@ -1,63 +1,58 @@
 import { Reveal } from "@/components/Reveal";
 import { TechTag } from "@/components/TechTag";
 import { profile, skillGroups } from "@/data/projects";
-import { MiniGame } from "@/components/MiniGame";
 import { SECTION_SHELL_CLASS, SectionHeading } from "@/components/SectionHeading";
 
 export function AboutSkills() {
   return (
-    <section id="about" aria-labelledby="about-heading" className={SECTION_SHELL_CLASS}>
+    <section
+      id="about"
+      aria-labelledby="about-heading"
+      className={`portfolio-module portfolio-about ${SECTION_SHELL_CLASS}`}
+    >
       <Reveal>
         <SectionHeading
           id="about-heading"
           eyebrow="About"
-          retroEyebrow="LEVEL 01 · ABOUT"
+          arcadeEyebrow="LEVEL 01 · ABOUT"
           title="A bit about me"
+          arcadeTitle="Player profile"
         />
         <p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground">{profile.longBio}</p>
       </Reveal>
 
-      <div className="normal-skills mt-12 grid gap-8 sm:grid-cols-3">
-        {skillGroups.map((group, i) => (
-          <Reveal key={group.label} delay={i * 120}>
-            <h3 className="font-pixel text-[11px] uppercase tracking-widest text-muted-foreground">
-              {group.label}
-            </h3>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {group.skills.map((skill) => (
-                <TechTag key={skill} label={skill} />
-              ))}
-            </div>
+      <div className="portfolio-inventory-heading mt-10 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="font-pixel text-[10px] uppercase tracking-[0.2em] text-primary">
+            <span className="normal-mode-copy">Skills &amp; tools</span>
+            <span className="arcade-mode-copy">Inventory</span>
+          </p>
+          <h3 className="mt-2 text-xl font-semibold tracking-tight">
+            <span className="normal-mode-copy">What I work with</span>
+            <span className="arcade-mode-copy">Skills equipped</span>
+          </h3>
+        </div>
+        <p className="text-xs text-muted-foreground arcade-mode-copy">
+          {skillGroups.length} skill groups
+        </p>
+      </div>
+
+      <div className="portfolio-skill-grid portfolio-skill-panel mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {skillGroups.map((group, index) => (
+          <Reveal key={group.label} delay={index * 80} className="portfolio-skill-grid-item h-full">
+            <article className="portfolio-skill-group pixel-step-sm h-full border border-border bg-card p-5">
+              <h4 className="font-pixel text-[10px] uppercase tracking-wider text-foreground">
+                {group.label}
+              </h4>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {group.skills.map((skill) => (
+                  <TechTag key={skill} label={skill} />
+                ))}
+              </div>
+            </article>
           </Reveal>
         ))}
       </div>
-
-      <Reveal className="retro-inventory mt-12" delay={120}>
-        <div
-          className="pixel-step border border-primary/50 bg-card p-5"
-          aria-label="Skill inventory"
-        >
-          <p className="font-pixel text-[11px] uppercase tracking-[0.2em] text-primary">
-            Inventory // skills equipped
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2" role="list">
-            {skillGroups.flatMap((group) =>
-              group.skills.map((skill) => (
-                <div
-                  key={skill}
-                  className="inline-flex items-center gap-1.5 border border-border bg-muted/40 px-2 py-1 text-xs"
-                  role="listitem"
-                >
-                  <span className="h-1.5 w-1.5 shrink-0 bg-primary" aria-hidden />
-                  <span className="font-medium">{skill}</span>
-                </div>
-              )),
-            )}
-          </div>
-        </div>
-      </Reveal>
-
-      <MiniGame />
     </section>
   );
 }

@@ -499,6 +499,14 @@ export const completedProjects = projects.filter((project) => project.status ===
 export const liveProjects = completedProjects;
 export const wipProjects = projects.filter((project) => project.status === "wip");
 
+export function isLiveWebsite(project: Project) {
+  return Boolean(project.external?.demo) || /\blive\b/i.test(project.statusLabel ?? "");
+}
+
+export function isAndroidProject(project: Project) {
+  return /android/i.test(project.category ?? "");
+}
+
 export function getProject(projectId: string) {
   return projects.find((project) => project.id === projectId);
 }
@@ -507,7 +515,7 @@ export const profile = {
   name: "Francis Giann Empleo",
   role: "Full-Stack Developer",
   shortBio:
-    "I’m an IT student who designs and builds websites and Android apps.",
+    "I’m an IT student who builds websites and Android apps that make everyday tasks easier, from booking a resort stay and scheduling clinic appointments to tracking expenses offline.",
   longBio:
     "My work includes resort booking websites, clinic appointment systems, and Android apps for budgeting and planning.",
   email: "empleo.francisgiann@gmail.com",

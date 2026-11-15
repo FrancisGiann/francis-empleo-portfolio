@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useRetroMode } from "@/hooks/use-retro-mode";
+import { DialogTitle } from "@/components/ui/dialog";
 
 type WindowWithWebkitAudioContext = Window & {
   webkitAudioContext?: typeof AudioContext;
 };
 
 export function MiniGame() {
-  const { enabled } = useRetroMode();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -22,13 +21,14 @@ export function MiniGame() {
   }, []);
 
   useEffect(() => {
-    if (!enabled || !isPlaying) return;
+    if (!isPlaying) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
     const context = canvas.getContext("2d");
     if (!context) return;
     const ctx: CanvasRenderingContext2D = context;
+    canvas.focus({ preventScroll: true });
 
     let raf: number;
     let lastTick = 0;
@@ -221,12 +221,27 @@ export function MiniGame() {
         }
       }
     };
-  }, [enabled, isPlaying, steer]);
-
-  if (!enabled) return null;
+  }, [isPlaying, steer]);
 
   return (
-    <div className="retro-inventory mt-12 mb-8">
+    <section
+      id="bonus-stage"
+      aria-labelledby="bonus-stage-heading"
+      tabIndex={-1}
+      data-game-controls
+      className="bonus-stage portfolio-module w-full px-4 py-5 sm:px-6 sm:py-6"
+    >
+      <header className="bonus-stage-heading mb-8">
+        <p className="font-pixel text-[10px] uppercase tracking-[0.2em] text-primary">
+          Secret unlock · bonus game
+        </p>
+        <DialogTitle id="bonus-stage-heading" className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">
+          Bonus Stage: Snake
+        </DialogTitle>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          A small playable extra. Use the arrow keys or W, A, S, D, or the on-screen D-pad.
+        </p>
+      </header>
       {/* ── Handheld Console Shell ── */}
       <div className="mx-auto w-full max-w-[380px] sm:max-w-[480px] md:max-w-[540px]">
         <div
@@ -386,6 +401,6 @@ export function MiniGame() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

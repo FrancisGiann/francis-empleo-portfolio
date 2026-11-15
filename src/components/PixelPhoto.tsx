@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useRetroMode } from "@/hooks/use-retro-mode";
 
 interface PixelPhotoProps {
   src: string;
@@ -14,7 +13,6 @@ interface PixelPhotoProps {
  * pixel-art canvas preview on hover or keyboard focus, OR a custom pixel art image.
  */
 export function PixelPhoto({ src, alt, width, height, pixelSrc }: PixelPhotoProps) {
-  const { enabled } = useRetroMode();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -83,32 +81,21 @@ export function PixelPhoto({ src, alt, width, height, pixelSrc }: PixelPhotoProp
       {pixelSrc ? (
         <img
           src={pixelSrc}
-          alt={`Pixel art version of ${alt}`}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ease-out motion-reduce:transition-none ${
-            enabled
-              ? "opacity-100"
-              : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
-          }`}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
         />
       ) : (
         <canvas
           ref={canvasRef}
           aria-hidden
-          className={`pointer-events-none absolute inset-0 h-full w-full [image-rendering:pixelated] transition-opacity duration-300 ease-out motion-reduce:transition-none ${
-            enabled
-              ? "opacity-100"
-              : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
-          }`}
+          className="pointer-events-none absolute inset-0 h-full w-full opacity-0 [image-rendering:pixelated] transition-opacity duration-300 ease-out group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
         />
       )}
       
       <span
         aria-hidden
-        className={`pointer-events-none absolute bottom-2 right-2 font-pixel text-[9px] transition-opacity duration-300 ${
-          enabled
-            ? "opacity-100"
-            : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
-        }`}
+        className="pointer-events-none absolute bottom-2 right-2 font-pixel text-[9px] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
       >
         8-BIT PREVIEW
       </span>

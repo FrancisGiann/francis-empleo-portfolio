@@ -19,7 +19,6 @@ import {
   type ChatMessage,
   type ChatPrompt,
 } from "@/lib/portfolio-chat";
-import { useRetroMode } from "@/hooks/use-retro-mode";
 import portrait from "@/assets/portrait.jpg";
 
 type ReplyMode = "ai" | "portfolio" | "unavailable";
@@ -142,7 +141,6 @@ export function PortfolioChat() {
   const activeControllerRef = useRef<AbortController | null>(null);
   const activeRequestIdRef = useRef(0);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const { enabled: retro } = useRetroMode();
   const routeProjectId = useMemo(() => {
     const match = /^\/projects\/([^/]+)$/.exec(pathname);
     const id = match?.[1];
@@ -376,7 +374,7 @@ export function PortfolioChat() {
           <button
             type="button"
             aria-label="Chat with Francis's AI portfolio assistant"
-            className={`fixed bottom-4 right-4 z-40 inline-flex min-h-11 items-center gap-2 border border-primary bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${retro ? "pixel-step-sm" : "rounded-md"}`}
+            className="fixed bottom-4 right-4 z-40 inline-flex min-h-11 items-center gap-2 rounded-md border border-primary bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <MessageCircle aria-hidden className="h-4 w-4" />
             Chat with Francis
@@ -387,7 +385,7 @@ export function PortfolioChat() {
             event.preventDefault();
             textareaRef.current?.focus();
           }}
-          className={`fixed left-auto top-auto right-4 bottom-4 flex h-[min(44rem,calc(100dvh-2rem))] w-[min(28rem,calc(100vw-2rem))] translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden border border-border bg-background p-0 shadow-2xl duration-200 [&>button:last-child]:right-3 [&>button:last-child]:top-3 [&>button:last-child]:z-10 [&>button:last-child]:flex [&>button:last-child]:h-11 [&>button:last-child]:w-11 [&>button:last-child]:items-center [&>button:last-child]:justify-center [&>button:last-child]:rounded-md [&>button:last-child]:border [&>button:last-child]:border-border [&>button:last-child]:bg-background [&>button:last-child]:opacity-100 [&>button:last-child]:focus-visible:ring-2 [&>button:last-child]:focus-visible:ring-inset [&>button:last-child]:focus-visible:ring-ring ${retro ? "pixel-step" : "rounded-xl"}`}
+          className="fixed left-auto top-auto right-4 bottom-4 flex h-[min(44rem,calc(100dvh-2rem))] w-[min(28rem,calc(100vw-2rem))] translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-xl border border-border bg-background p-0 shadow-2xl duration-200 [&>button:last-child]:right-3 [&>button:last-child]:top-3 [&>button:last-child]:z-10 [&>button:last-child]:flex [&>button:last-child]:h-11 [&>button:last-child]:w-11 [&>button:last-child]:items-center [&>button:last-child]:justify-center [&>button:last-child]:rounded-md [&>button:last-child]:border [&>button:last-child]:border-border [&>button:last-child]:bg-background [&>button:last-child]:opacity-100 [&>button:last-child]:focus-visible:ring-2 [&>button:last-child]:focus-visible:ring-inset [&>button:last-child]:focus-visible:ring-ring"
         >
           <DialogHeader className="shrink-0 border-b border-border bg-card px-4 py-3 pr-16 text-left sm:px-5">
             <div className="flex min-h-11 items-center gap-3">
@@ -462,8 +460,8 @@ export function PortfolioChat() {
                   }
                   className={`max-w-[90%] space-y-3 px-4 py-3 text-sm leading-relaxed ${
                     message.role === "user"
-                      ? `bg-primary text-primary-foreground ${retro ? "pixel-step-sm" : "rounded-xl rounded-br-sm"}`
-                      : `border border-border bg-card text-card-foreground ${retro ? "pixel-step-sm" : "rounded-xl rounded-bl-sm"}`
+                      ? "rounded-xl rounded-br-sm bg-primary text-primary-foreground"
+                      : "rounded-xl rounded-bl-sm border border-border bg-card text-card-foreground"
                   }`}
                 >
                   <p className="whitespace-pre-wrap break-words">{message.text}</p>

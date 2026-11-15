@@ -32,13 +32,18 @@ export function GitHubActivity() {
     : { blockSize: 10, blockMargin: 2, fontSize: 12 };
 
   return (
-    <section aria-labelledby="github-heading" className={SECTION_SHELL_CLASS}>
+    <section
+      id="github-activity"
+      aria-labelledby="github-heading"
+      className={`portfolio-module portfolio-activity ${SECTION_SHELL_CLASS}`}
+    >
       <Reveal>
         <SectionHeading
           id="github-heading"
           eyebrow="GitHub"
-          retroEyebrow="LEVEL 04 · ACTIVITY"
+          arcadeEyebrow="LEVEL 04 · ACTIVITY"
           title="Activity"
+          arcadeTitle="Contribution archive"
         />
         <p className="mt-3 text-muted-foreground">
           Live contribution graph from{" "}
@@ -54,7 +59,7 @@ export function GitHubActivity() {
       </Reveal>
 
       <Reveal delay={120}>
-        <div className="mx-auto mt-8 w-full max-w-full border border-border bg-card p-2 sm:p-4">
+        <div className="portfolio-activity-calendar mx-auto mt-8 w-full max-w-full border border-border bg-card p-2 sm:p-4">
           <div className="flex min-w-0 justify-center">
             {mounted && (
               <GitHubCalendar

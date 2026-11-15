@@ -10,7 +10,7 @@ const actionClass =
 export function ProjectCard({ project }: { project: Project }) {
   const statusLabel = project.statusLabel ?? (project.status === "wip" ? "WIP" : "Completed");
   return (
-    <article className="project-card group flex h-full min-w-0 flex-col overflow-hidden border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg motion-reduce:transform-none motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+    <article className="portfolio-project-card project-card group flex h-full min-w-0 flex-col overflow-hidden border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg motion-reduce:transform-none motion-reduce:transition-none motion-reduce:hover:translate-y-0">
       <Link
         to="/projects/$projectId"
         params={{ projectId: project.id }}
@@ -27,7 +27,8 @@ export function ProjectCard({ project }: { project: Project }) {
             {project.category ?? "Project"}
           </p>
           <span
-            className={`inline-flex min-h-7 items-center border px-2.5 text-[11px] font-medium ${
+            data-status={project.status}
+            className={`project-status-badge inline-flex min-h-7 items-center border px-2.5 text-[11px] font-medium ${
               project.status === "wip"
                 ? "border-wip/50 bg-wip/15 text-foreground"
                 : "border-border bg-muted/50 text-muted-foreground"
@@ -67,8 +68,8 @@ export function ProjectCard({ project }: { project: Project }) {
             viewTransition={{ types: ["route"] }}
             className={`${actionClass} pl-0 text-primary hover:text-foreground`}
           >
-            <span className="normal-cta-label">Details</span>
-            <span className="retro-cta-label">Open stage</span>
+            <span className="normal-mode-copy">Details</span>
+            <span className="arcade-mode-copy">Open stage</span>
             <ArrowUpRight className="h-4 w-4" aria-hidden />
           </Link>
           {project.external?.demo ? (

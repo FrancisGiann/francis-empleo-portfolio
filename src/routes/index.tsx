@@ -7,7 +7,6 @@ import { NowSection } from "@/components/NowSection";
 import { GitHubActivity } from "@/components/GitHubActivity";
 import { ContactSection } from "@/components/ContactSection";
 import { SiteFooter } from "@/components/SiteFooter";
-import { profile } from "@/data/projects";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,18 +32,14 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="portfolio-shell min-h-screen bg-background text-foreground">
       <SiteNav />
       <main>
         <Hero />
         <SelectedProjects />
-        <hr className="divider-dotted mx-auto max-w-6xl" />
         <AboutSkills />
-        <hr className="divider-dotted mx-auto max-w-6xl" />
         <NowSection />
-        <hr className="divider-dotted mx-auto max-w-6xl" />
         <GitHubActivity />
-        <hr className="divider-dotted mx-auto max-w-6xl" />
         <ContactSection />
       </main>
       <SiteFooter />
