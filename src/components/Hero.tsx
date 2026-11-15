@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Magnetic } from "@/components/Magnetic";
@@ -54,9 +54,11 @@ async function fetchLastYearContributionCount(signal: AbortSignal) {
 }
 
 export function Hero() {
+  const artViewportRef = useRef<HTMLDivElement | null>(null);
   const { display, done } = useTypewriter(profile.name);
   const { enabled: arcadeEnabled } = useKonami();
   const [bonusStageOpen, setBonusStageOpen] = useState(false);
+  const [artVisible, setArtVisible] = useState(true);
   const contributionQuery = useQuery({
     queryKey: ["github-contribution-count", profile.githubUsername, "last"],
     queryFn: ({ signal }) => fetchLastYearContributionCount(signal),
@@ -73,6 +75,18 @@ export function Hero() {
   useEffect(() => {
     if (!arcadeEnabled) setBonusStageOpen(false);
   }, [arcadeEnabled]);
+
+  useEffect(() => {
+    const target = artViewportRef.current;
+    if (!target || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setArtVisible(entry?.isIntersecting ?? true),
+      { rootMargin: "80px" },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
 
   const identity = (
     <div className="portfolio-hero-identity">
@@ -151,7 +165,40 @@ export function Hero() {
 
   return (
     <>
-      <section id="top" className="portfolio-hero relative isolate overflow-hidden">
+      <section
+        id="top"
+        data-scene-visible={artVisible ? "true" : "false"}
+        className="portfolio-hero relative isolate overflow-hidden"
+      >
+        <div ref={artViewportRef} className="portfolio-hero-art-viewport" aria-hidden="true">
+          <div className="portfolio-hero-art-plane">
+            <div className="portfolio-hero-art-pan">
+              <div className="portfolio-hero-art-base" />
+              <div className="portfolio-hero-art-sprite hero-art-island-1">
+                <span className="portfolio-hero-art-sprite-source" />
+              </div>
+              <div className="portfolio-hero-art-sprite hero-art-island-2">
+                <span className="portfolio-hero-art-sprite-source" />
+              </div>
+              <div className="portfolio-hero-art-sprite hero-art-island-3">
+                <span className="portfolio-hero-art-sprite-source" />
+              </div>
+              <div className="portfolio-hero-art-sprite hero-art-island-4">
+                <span className="portfolio-hero-art-sprite-source" />
+              </div>
+              <div className="portfolio-hero-art-sprite hero-art-canopy">
+                <span className="portfolio-hero-art-sprite-source" />
+              </div>
+              <div className="portfolio-hero-lanterns">
+                <span className="portfolio-hero-lantern portfolio-hero-lantern-1" />
+                <span className="portfolio-hero-lantern portfolio-hero-lantern-2" />
+                <span className="portfolio-hero-lantern portfolio-hero-lantern-3" />
+                <span className="portfolio-hero-lantern portfolio-hero-lantern-4" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="portfolio-hero-scrim" aria-hidden="true" />
         <div className="portfolio-hero-inner relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
           {arcadeEnabled ? (
             <div className="arcade-game-menu pixel-step">

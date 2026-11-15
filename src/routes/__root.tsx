@@ -15,6 +15,7 @@ import appCss from "../styles.css?url";
 import { ThemeProvider, useTheme } from "../hooks/use-theme";
 import { ArcadeModeProvider } from "../hooks/use-konami";
 import { PortfolioChat } from "../components/PortfolioChat";
+import { AmbientLeavesProvider } from "../components/AmbientLeaves";
 
 function NotFoundComponent() {
   return (
@@ -142,12 +143,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <ArcadeModeProvider>
-          <ThemedToaster />
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-          <PortfolioChat />
-        </ArcadeModeProvider>
+        <AmbientLeavesProvider>
+          <ArcadeModeProvider>
+            <ThemedToaster />
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            <PortfolioChat />
+          </ArcadeModeProvider>
+        </AmbientLeavesProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
