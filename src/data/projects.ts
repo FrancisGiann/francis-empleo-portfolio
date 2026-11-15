@@ -517,7 +517,7 @@ export const profile = {
   shortBio:
     "I’m an IT student who builds full-stack web applications and Android apps. My work spans user interface design, backend development, and database integration.",
   longBio:
-    "My work includes resort booking websites, clinic appointment systems, and Android apps for budgeting and planning.",
+    "I’m an IT student interested in how software fits into the work people already do. I start by mapping out what someone needs to accomplish and what information they need at each step. That helps me decide how to organize the screens and what the application needs to do behind the scenes.\n\nMy projects have given me experience with both customer-facing websites and tools that staff use to manage requests and records. On Android, I’ve also worked on apps that people can use offline. I pay attention to how each workflow behaves when someone edits an entry, makes a mistake, or picks up where they left off.",
   email: "empleo.francisgiann@gmail.com",
   resumeHref: "/Francis-Giann-Empleo-Resume.pdf",
   github: "https://github.com/FrancisGiann",

@@ -18,7 +18,11 @@ export function AboutSkills() {
           title="A bit about me"
           arcadeTitle="Player profile"
         />
-        <p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground">{profile.longBio}</p>
+        <div className="mt-5 max-w-2xl space-y-3 leading-relaxed text-muted-foreground">
+          {profile.longBio.split(/\n{2,}/).map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
       </Reveal>
 
       <div className="portfolio-inventory-heading mt-10 flex flex-wrap items-end justify-between gap-3">
