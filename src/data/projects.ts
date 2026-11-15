@@ -515,7 +515,7 @@ export const profile = {
   name: "Francis Giann Empleo",
   role: "Full-Stack Developer",
   shortBio:
-    "I’m an IT student who builds websites and Android apps that make everyday tasks easier, from booking a resort stay and scheduling clinic appointments to tracking expenses offline.",
+    "I’m an IT student who builds full-stack web applications and Android apps. My work spans user interface design, backend development, and database integration.",
   longBio:
     "My work includes resort booking websites, clinic appointment systems, and Android apps for budgeting and planning.",
   email: "empleo.francisgiann@gmail.com",
