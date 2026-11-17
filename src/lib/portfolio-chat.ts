@@ -77,7 +77,8 @@ export const welcomeMessage: ChatMessage = {
 
 function normalize(value: string) {
   return value
-    .normalize("NFKC")
+    .normalize("NFKD")
+    .replace(/\p{M}/gu, "")
     .toLocaleLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim();
@@ -115,12 +116,15 @@ export function resolveChatProjectIdFromHistory(
 }
 
 function findMentionedProject(question: string) {
+  const catalogMatch = projects.find(
+    ({ id, title }) =>
+      hasAny(question, [normalize(id)]) ||
+      (id !== "flow-typing-workspace" && hasAny(question, [normalize(title)])),
+  );
+  if (catalogMatch) return catalogMatch;
   if (hasAny(question, ["sevilla360", "sevilla 360"])) return getProject("sevilla360");
-  if (hasAny(question, ["general luna", "general luna game", "luna game"])) {
-    return getProject("general-luna-game");
-  }
-  if (hasAny(question, ["kapeez"])) return getProject("kapeez-cafe-pos");
   if (
+    question === "flow" ||
     hasAny(question, ["typing", "typing practice", "flow project", "flow app"]) ||
     (hasAny(question, ["flow"]) &&
       hasAny(question, [
@@ -151,7 +155,7 @@ function contactLinks(): ChatLink[] {
 
 function projectReply(
   project: NonNullable<ReturnType<typeof getProject>>,
-  intent: "overview" | "stack" | "challenge" | "outcome",
+  intent: "overview" | "stack" | "challenge" | "outcome" | "contribution",
 ): ChatMessage {
   let answer: string;
   if (intent === "stack") {
@@ -166,6 +170,8 @@ function projectReply(
     answer = outcomes.length
       ? `The ${project.title} case-study draft describes these outcomes: ${outcomes.join(" ")}`
       : `I don't have outcome details for ${project.title} in this portfolio yet.`;
+  } else if (intent === "contribution") {
+    answer = `Francis's work on ${project.title} included ${project.contribution.charAt(0).toLowerCase()}${project.contribution.slice(1)}`;
   } else {
     answer = `${project.title}: ${project.description}`;
   }
@@ -204,6 +210,9 @@ export function answerPortfolioQuestion(question: string, currentProjectId?: str
       "who are you",
       "tell me about yourself",
       "about you",
+      "about francis",
+      "who is francis",
+      "your name",
       "what do you do",
       "introduce yourself",
     ])
@@ -218,7 +227,17 @@ export function answerPortfolioQuestion(question: string, currentProjectId?: str
     };
   }
 
+  if (hasAny(normalized, ["resume", "cv", "curriculum vitae"])) {
+    return {
+      ...welcomeMessage,
+      id: "",
+      text: "You can download Francis's résumé as a PDF.",
+      links: [{ label: "Download résumé", href: profile.resumeHref }],
+    };
+  }
+
   if (
+    !mentionedProject &&
     hasAny(normalized, [
       "email",
       "contact",
@@ -244,6 +263,7 @@ export function answerPortfolioQuestion(question: string, currentProjectId?: str
   }
 
   if (
+    !mentionedProject &&
     hasAny(normalized, [
       "salary",
       "rate",
@@ -267,6 +287,7 @@ export function answerPortfolioQuestion(question: string, currentProjectId?: str
   }
 
   if (
+    !mentionedProject &&
     hasAny(normalized, [
       "projects",
       "project list",
@@ -279,7 +300,7 @@ export function answerPortfolioQuestion(question: string, currentProjectId?: str
     return {
       id: "",
       role: "assistant",
-      text: `The projects featured here are ${projects.map((item) => item.title).join(", ")}. Sevilla360 is marked as work in progress, and some case-study details are still drafts.`,
+      text: `The projects featured here are ${projects.map((item) => item.title).join(", ")}.`,
       links: projects.map((item) => ({ label: item.title, projectId: item.id })),
       prompts: generalPrompts,
       retryable: false,
@@ -314,14 +335,22 @@ export function answerPortfolioQuestion(question: string, currentProjectId?: str
     "tricky",
   ]);
   const asksForOutcome = hasAny(normalized, ["outcome", "outcomes", "results", "result", "impact"]);
+  const asksForContribution = hasAny(normalized, [
+    "what did you do",
+    "what did you build",
+    "your role",
+    "your contribution",
+    "what did francis do",
+  ]);
   const asksAboutProject = hasAny(normalized, [
-    "what is",
-    "tell me about",
-    "explain",
-    "describe",
-    "what does",
-    "details",
-    "overview",
+    "what is it",
+    "tell me more",
+    "tell me about this project",
+    "explain it",
+    "describe it",
+    "what does it do",
+    "project details",
+    "project overview",
   ]);
 
   if (
@@ -329,6 +358,7 @@ export function answerPortfolioQuestion(question: string, currentProjectId?: str
     (asksForProjectStack ||
       asksForChallenge ||
       asksForOutcome ||
+      asksForContribution ||
       asksAboutProject ||
       mentionedProject)
   ) {
@@ -338,14 +368,16 @@ export function answerPortfolioQuestion(question: string, currentProjectId?: str
         ? "challenge"
         : asksForOutcome
           ? "outcome"
-          : "overview";
+          : asksForContribution
+            ? "contribution"
+            : "overview";
     return { ...projectReply(project, intent), id: "" };
   }
 
   if (asksForSkills) {
     const languages = skillGroups.find((group) => group.label === "Languages")?.skills ?? [];
     const frameworks = skillGroups.find((group) => group.label === "Frameworks")?.skills ?? [];
-    const tools = skillGroups.find((group) => group.label === "Tools & Databases")?.skills ?? [];
+    const tools = skillGroups.find((group) => group.label === "Data & tools")?.skills ?? [];
     return {
       id: "",
       role: "assistant",

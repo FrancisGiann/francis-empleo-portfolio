@@ -61,13 +61,12 @@ function ProjectsPage() {
           <span className="arcade-mode-copy">Back to map</span>
         </Link>
 
-        <header className="portfolio-projects-heading mt-8 flex flex-col gap-6 pb-7 md:flex-row md:items-end md:justify-between">
+        <header className="portfolio-projects-heading mt-8 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between md:gap-6 md:pb-7">
           <div>
-            <p className="font-pixel text-[11px] uppercase tracking-[0.22em] text-primary">
-              <span className="normal-mode-copy">Projects</span>
-              <span className="arcade-mode-copy">LEVEL 02 · SELECT QUEST</span>
+            <p className="arcade-mode-copy mb-3 font-pixel text-[11px] uppercase tracking-[0.22em] text-primary">
+              LEVEL 02 · SELECT QUEST
             </p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
               <span className="normal-mode-copy">Projects</span>
               <span className="arcade-mode-copy">Select quest</span>
             </h1>
@@ -86,7 +85,10 @@ function ProjectsPage() {
           </a>
         </header>
 
-        <nav className="portfolio-project-filters mt-6 flex flex-wrap gap-2" aria-label="Filter projects">
+        <nav
+          aria-label="Filter projects"
+          className="mt-6 grid grid-cols-3 gap-2 sm:flex sm:flex-wrap"
+        >
           <Link
             to="/projects"
             search={{ category: undefined }}

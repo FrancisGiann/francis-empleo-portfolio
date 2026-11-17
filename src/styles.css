@@ -959,6 +959,11 @@ html.retro .architecture-node h3 {
   object-fit: contain;
 }
 
+.project-showcase.project-showcase-widescreen {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+}
+
 .project-showcase-static > img {
   display: block;
   width: 100%;
@@ -1192,10 +1197,6 @@ html.retro .architecture-node h3 {
   height: 4px;
   background: linear-gradient(90deg, #d39b4c 0 25%, var(--portfolio-mint) 25% 50%, var(--portfolio-lilac) 50% 75%, var(--portfolio-sky) 75%);
   content: "";
-}
-
-.portfolio-projects-heading {
-  align-items: end;
 }
 
 .portfolio-project-grid {
@@ -1873,6 +1874,16 @@ html.arcade-mode .arcade-mode-copy {
   background: url("/pixel-art/portfolio-dusk-clean.webp") no-repeat center / 100% 100%;
 }
 
+html:not(.dark, .arcade-mode) .portfolio-hero-art-base {
+  background-image: url("/pixel-art/portfolio-day.webp");
+}
+
+html:not(.dark, .arcade-mode) .portfolio-hero::after,
+html:not(.dark, .arcade-mode) .portfolio-hero-art-sprite,
+html:not(.dark, .arcade-mode) .portfolio-hero-lanterns {
+  display: none;
+}
+
 .portfolio-hero-art-sprite {
   position: absolute;
   left: var(--sprite-x);
@@ -2054,8 +2065,13 @@ html.dark:not(.arcade-mode) .portfolio-hero-scrim {
 
   html:not(.dark, .arcade-mode) .portfolio-hero-scrim {
     background-image:
-      linear-gradient(180deg, transparent 23%, color-mix(in srgb, var(--hero-wash) 78%, transparent) 38% 66%, transparent 86%),
-      linear-gradient(90deg, var(--hero-wash) 0%, color-mix(in srgb, var(--hero-wash) 92%, transparent) 52%, color-mix(in srgb, var(--hero-wash) 40%, transparent) 100%),
+      linear-gradient(
+        90deg,
+        var(--hero-wash) 0% 32%,
+        color-mix(in srgb, var(--hero-wash) 82%, transparent) 54%,
+        color-mix(in srgb, var(--hero-wash) 46%, transparent) 78%,
+        color-mix(in srgb, var(--hero-wash) 18%, transparent) 100%
+      ),
       linear-gradient(0deg, var(--background) 0%, color-mix(in srgb, var(--background) 0%, transparent) 30%);
   }
 }
@@ -2647,6 +2663,14 @@ html.arcade-mode .portfolio-hero-stat-card:last-child {
 
 .portfolio-project-filter:hover:not([aria-current="page"]) {
   border-color: color-mix(in srgb, var(--primary) 50%, var(--border));
+}
+
+@media (max-width: 39.999rem) {
+  .portfolio-project-filter {
+    justify-content: center;
+    padding-inline: 0.45rem;
+    text-align: center;
+  }
 }
 
 html:not(.arcade-mode) .portfolio-project-filter {

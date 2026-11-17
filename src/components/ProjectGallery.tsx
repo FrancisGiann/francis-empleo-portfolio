@@ -7,7 +7,12 @@ export function ProjectGallery({ project }: { project: Project }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const closeViewer = useCallback(() => setActiveIndex(null), []);
   const screenCount = project.screenshots.length;
-  const previewAspect = project.device === "phone" ? "aspect-[3/4]" : "aspect-[4/3]";
+  const previewAspect =
+    project.mediaAspect === "16:9"
+      ? "aspect-video"
+      : project.device === "phone"
+        ? "aspect-[3/4]"
+        : "aspect-[4/3]";
 
   return (
     <section

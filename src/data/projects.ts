@@ -1,4 +1,3 @@
-import sevillaScreen from "@/assets/project-sevilla1.webp";
 import flowScreen from "@/assets/project-flow1.webp";
 
 export interface Project {
@@ -26,6 +25,7 @@ export interface Project {
   /** Safe source capture used inside the browser or phone mockup. */
   showcaseScreen?: string;
   showcaseImage?: string;
+  mediaAspect?: "16:9";
   logo?: string;
   imageAlt: string;
   mediaNote?: string;
@@ -74,32 +74,41 @@ export const projects: Project[] = [
     images: [],
     screenshots: [
       {
-        src: "/references/gallery/sevilla-booking.webp",
-        alt: "Public Sevilla360 booking flow with event hall selection.",
-        caption: "Choose a venue and begin a booking request.",
+        src: "/references/gallery/sevilla-tour-hotspot.webp",
+        alt: "Infinity Hall panorama with a movement hotspot, destinations menu, and tour controls.",
+        caption: "Explore Infinity Hall in 360° and move around using the tour hotspots.",
       },
       {
-        src: "/references/gallery/sevilla-venue-inquiry.webp",
-        alt: "Public event-date inquiry screen for Abelardo Hall.",
-        caption: "Review event dates for Abelardo Hall.",
+        src: "/references/gallery/sevilla-tour-center.webp",
+        alt: "Infinity Hall panorama from the center, with the decorated stage and venue information.",
+        caption: "View the hall from another position and check venue details alongside the tour.",
       },
       {
-        src: "/references/gallery/sevilla-accommodations.webp",
-        alt: "Public resort accommodations and event-space listing.",
-        caption: "Browse resort accommodations and event spaces.",
+        src: "/references/gallery/sevilla-hotel-rooms.webp",
+        alt: "Sevilla360 Hotel Rooms listing showing the Kristel Standard room, nightly rate, capacity, and booking controls.",
+        caption: "Browse the Hotel Rooms carousel and review the Kristel Standard room before booking.",
+      },
+      {
+        src: "/references/gallery/sevilla-select-venue.webp",
+        alt: "Event booking Choose step with Infinity Hall selected and its venue information and amenities visible.",
+        caption: "Choose Infinity Hall and review its venue information and amenities before selecting dates.",
+      },
+      {
+        src: "/references/gallery/sevilla-booking-calendar.webp",
+        alt: "Event Hall booking calendar with Choose, Dates, Options, and Review steps.",
+        caption: "Check venue availability before submitting a booking inquiry.",
       },
     ],
-    coverageNote: "Booking and venue screens; the 360° tour is not pictured.",
     contribution: "Booking management CMS and public website accessibility improvements.",
     features: [
       "Explore resort spaces through an interactive 360° panorama.",
       "Submit booking requests and payment proof for staff review.",
       "Staff can review and finalize booking and payment records.",
     ],
-    showcaseImage: "/showcases/sevilla360.webp",
-    showcaseScreen: sevillaScreen,
-    imageAlt: "Sevilla360 resort website landing page.",
-    mediaNote: "Public landing page capture.",
+    showcaseImage: "/showcases/sevilla360-homepage.webp",
+    mediaAspect: "16:9",
+    imageAlt: "Sevilla360 homepage with the resort pool and links to book a stay or explore the property.",
+    mediaNote: "Live resort homepage capture.",
     external: {
       repo: "https://github.com/FrancisGiann/Sevilla360",
       demo: "https://misevillas.com",

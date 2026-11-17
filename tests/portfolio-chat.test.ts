@@ -37,12 +37,32 @@ describe("portfolio chat server", () => {
       "React",
     );
     expect(answerPortfolioQuestion("What was hardest?", "flow-typing-workspace").text).toContain(
-      "internet connection",
+      "don't have challenge details for Flow",
     );
     expect(answerPortfolioQuestion("What are your rates?").text).toContain("doesn't include");
     expect(resolveChatProjectId("What was hardest in Flow?", undefined)).toBe(
       "flow-typing-workspace",
     );
+  });
+
+  test("answers basic questions about current projects and the résumé without an AI key", async () => {
+    const handle = createPortfolioChatHandler({ env: {}, limiter: newLimiter() });
+    const response = await handle(
+      makeRequest(makePayload([{ role: "user", content: "What is PonPon?" }])),
+    );
+    const result = await response.json();
+
+    expect(result.mode).toBe("portfolio");
+    expect(result.text).toContain("offline Android ledger");
+    expect(resolveChatProjectId("Tell me about Ready Yet?", undefined)).toBe("ready-yet");
+    expect(resolveChatProjectId("Tell me about HealthMate", "ponpon")).toBe("healthmate");
+    expect(answerPortfolioQuestion("What did you do on ARKTIESIIS?").text).toContain("grade imports");
+    expect(answerPortfolioQuestion("What skills do you have?").text).toContain("PostgreSQL");
+    expect(answerPortfolioQuestion("Can I see your résumé?").links[0]?.href).toBe(
+      "/Francis-Giann-Empleo-Resume.pdf",
+    );
+    expect(answerPortfolioQuestion("What is the weather?", "ponpon").text).not.toContain("PonPon");
+    expect(answerPortfolioQuestion("What are your projects?").text).not.toContain("work in progress");
   });
 
   test("bounds client history by UTF-8 bytes while retaining the newest question", () => {

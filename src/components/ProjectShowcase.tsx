@@ -10,8 +10,9 @@ export function ProjectShowcase({ project }: { project: Project }) {
   const mediaNote = project.mediaNote ?? `${project.title} project preview.`;
 
   if (staticImage) {
+    const aspectClass = project.mediaAspect === "16:9" ? " project-showcase-widescreen" : "";
     return (
-      <figure className="project-showcase project-showcase-static" style={accentStyle}>
+      <figure className={`project-showcase project-showcase-static${aspectClass}`} style={accentStyle}>
         <img src={staticImage} alt={project.imageAlt} loading="lazy" decoding="async" />
         <figcaption className="sr-only">{mediaNote}</figcaption>
       </figure>

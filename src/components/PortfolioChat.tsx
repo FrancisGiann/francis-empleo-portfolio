@@ -93,6 +93,7 @@ function safeLinks(links: unknown): ChatLink[] {
       (href === `mailto:${profile.email}` ||
         href === profile.github ||
         href === profile.linkedin ||
+        href === profile.resumeHref ||
         href === "/#about")
     ) {
       safe.push({ label: link["label"], href });
@@ -374,9 +375,9 @@ export function PortfolioChat() {
           <button
             type="button"
             aria-label="Chat with Francis's AI portfolio assistant"
-            className="fixed bottom-4 right-4 z-40 inline-flex min-h-11 items-center gap-2 rounded-md border border-primary bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="fixed bottom-4 right-4 z-40 inline-flex min-h-11 items-center gap-1.5 rounded-md border border-primary bg-primary px-2.5 py-2 text-xs font-semibold text-primary-foreground shadow-lg transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:gap-2 sm:px-4 sm:py-3 sm:text-sm"
           >
-            <MessageCircle aria-hidden className="h-4 w-4" />
+            <MessageCircle aria-hidden className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             Chat with Francis
           </button>
         </DialogTrigger>

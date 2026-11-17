@@ -7,7 +7,7 @@ export function SiteFooter() {
 
   return (
     <footer className="portfolio-footer border-t border-border">
-      <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-5 px-4 py-8 sm:flex-row sm:items-center sm:px-6">
+      <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-5 px-4 pt-8 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] sm:flex-row sm:items-center sm:px-6">
         <div>
           <p className="font-pixel text-[10px] uppercase tracking-widest text-primary">
             <span className="normal-mode-copy">Portfolio</span>

@@ -13,15 +13,14 @@ export function SelectedProjects() {
       className="portfolio-module portfolio-projects mx-auto max-w-6xl px-4 pt-10 pb-16 sm:px-6 sm:pt-12 sm:pb-20"
     >
       <Reveal>
-        <div className="portfolio-projects-heading flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="portfolio-projects-heading flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between md:gap-6">
           <div>
-            <p className="font-pixel text-[11px] uppercase tracking-[0.22em] text-primary">
-              <span className="normal-mode-copy">Projects</span>
-              <span className="arcade-mode-copy">LEVEL 02 · SELECT QUEST</span>
+            <p className="arcade-mode-copy mb-3 font-pixel text-[11px] uppercase tracking-[0.22em] text-primary">
+              LEVEL 02 · SELECT QUEST
             </p>
             <h2
               id="selected-projects-heading"
-              className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl"
+              className="text-3xl font-semibold tracking-tight sm:text-4xl"
             >
               <span className="normal-mode-copy">Projects</span>
               <span className="arcade-mode-copy">Select quest</span>
