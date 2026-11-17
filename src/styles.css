@@ -1712,6 +1712,10 @@ html.retro .architecture-node h3 {
 }
 
 @media (max-width: 47.999rem) {
+  html:not(.arcade-mode) .portfolio-shell {
+    background-image: none;
+  }
+
   .portfolio-hero-inner {
     min-height: auto;
     align-items: flex-start;
@@ -2044,6 +2048,13 @@ html.dark:not(.arcade-mode) .portfolio-hero-scrim {
 
   html:not(.arcade-mode) .portfolio-hero-scrim {
     background-image:
+      linear-gradient(90deg, var(--hero-wash) 0%, color-mix(in srgb, var(--hero-wash) 92%, transparent) 52%, color-mix(in srgb, var(--hero-wash) 40%, transparent) 100%),
+      linear-gradient(0deg, var(--background) 0%, color-mix(in srgb, var(--background) 0%, transparent) 30%);
+  }
+
+  html:not(.dark, .arcade-mode) .portfolio-hero-scrim {
+    background-image:
+      linear-gradient(180deg, transparent 23%, color-mix(in srgb, var(--hero-wash) 78%, transparent) 38% 66%, transparent 86%),
       linear-gradient(90deg, var(--hero-wash) 0%, color-mix(in srgb, var(--hero-wash) 92%, transparent) 52%, color-mix(in srgb, var(--hero-wash) 40%, transparent) 100%),
       linear-gradient(0deg, var(--background) 0%, color-mix(in srgb, var(--background) 0%, transparent) 30%);
   }

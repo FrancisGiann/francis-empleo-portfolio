@@ -122,13 +122,15 @@ export function Hero() {
 
   const playerPortrait = (
     <div className="portfolio-player-portrait">
-      <PixelPhoto
-        src={portrait}
-        pixelSrc={pixelPortrait}
-        alt="Portrait of the portfolio owner"
-        width={768}
-        height={960}
-      />
+      <div className="pixel-step relative aspect-[4/5] overflow-hidden bg-card">
+        <img
+          src={pixelPortrait}
+          alt={`Pixel-art portrait of ${profile.name}`}
+          width={896}
+          height={1200}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      </div>
     </div>
   );
 
